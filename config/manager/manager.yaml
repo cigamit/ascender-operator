@@ -73,8 +73,8 @@ spec:
             memory: "32Mi"
             cpu: "50m"
           limits:
-            memory: "960Mi"
-            cpu: "1500m"
+            memory: "4000Mi"
+            cpu: "2000m"
       serviceAccountName: controller-manager
       imagePullSecrets:
       - name: redhat-operators-pull-secret
