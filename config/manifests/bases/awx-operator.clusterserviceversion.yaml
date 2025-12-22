@@ -5,11 +5,11 @@ metadata:
     alm-examples: '[]'
     capabilities: Basic Install
     categories: Integration & Delivery
-    containerImage: ghcr.io/cigamit/ascender-operator:latest
+    containerImage: ghcr.io/ctrliq/ascender-operator:latest
     createdAt: "2019-10-30"
     description: Ascender provides a web-based user interface, REST API, and task engine
       built on top of Ansible.
-    repository: https://github.com/cigamit/ascender-operator
+    repository: https://github.com/ctrliq/ascender-operator
     support: forum.ansible.com
   name: ascender-operator.v0.0.0
   namespace: placeholder
@@ -1209,7 +1209,7 @@ spec:
   - ansible
   links:
   - name: Ascender Operator
-    url: https://github.com/cigamit/ascender-operator
+    url: https://github.com/ctrliq/ascender-operator
   maintainers:
   - email: sales@ciq.com
     name: Ascender Team
@@ -1217,5 +1217,5 @@ spec:
   minKubeVersion: 1.22.15
   provider:
     name: Ansible
-    url: github.com/cigamit/ascender-operator
+    url: github.com/ctrliq/ascender-operator
   version: 0.0.0
