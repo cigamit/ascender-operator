@@ -7,6 +7,23 @@ metadata:
   labels:
     {{ lookup("template", "../common/templates/labels/common.yaml.j2") | indent(width=4) | trim }}
 spec:
+{% if not is_openshift %}
+  initContainers:
+    - name: init
+      image: "{{ _postgres_image }}"
+      imagePullPolicy: "{{ image_pull_policy }}"
+      securityContext:
+        runAsUser: 0
+      command:
+        - /bin/sh
+        - -c
+        - |
+          {{ backup_init_container_commands | indent(width=10) }}
+      volumeMounts:
+        - name: {{ ansible_operator_meta.name }}-backup
+          mountPath: /backups
+          readOnly: false
+{% endif %}
   containers:
   - name: {{ ansible_operator_meta.name }}-db-management
     image: "{{ _postgres_image }}"
