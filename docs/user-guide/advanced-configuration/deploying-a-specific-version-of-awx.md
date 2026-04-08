@@ -4,16 +4,16 @@ There are a few variables that are customizable for awx the image management.
 
 | Name                          | Description               | Default                                    |
 | ----------------------------- | ------------------------- | ------------------------------------------ |
-| image                         | Path of the image to pull | quay.io/ansible/awx                        |
+| image                         | Path of the image to pull | ghcr.io/ctrliq/ascender                    |
 | image_version                 | Image version to pull     | value of DEFAULT_AWX_VERSION or latest     |
 | image_pull_policy             | The pull policy to adopt  | IfNotPresent                               |
 | image_pull_secrets            | The pull secrets to use   | None                                       |
-| ee_images                     | A list of EEs to register | quay.io/ansible/awx-ee:DEFAULT_AWX_VERSION |
+| ee_images                     | A list of EEs to register | ghcr.io/ctrliq/ascender-ee:latest          |
 | redis_image                   | Path of the image to pull | ghcr.io/valkey-io/valkey                   |
 | redis_image_version           | Image version to pull     | latest                                     |
-| control_plane_ee_image        | Image version to pull     | quay.io/ansible/awx-ee:DEFAULT_AWX_VERSION |
-| init_container_image          | Path of the image to pull | quay.io/ansible/awx-ee                     |
-| init_container_image_version  | Image version to pull     | value of DEFAULT_AWX_VERSION or latest     |
+| control_plane_ee_image        | Image version to pull     | ghcr.io/ctrliq/ascender-ee:latest          |
+| init_container_image          | Path of the image to pull | ghcr.io/ctrliq/ascender-ee                 |
+| init_container_image_version  | Image version to pull     | latest                                     |
 | init_projects_container_image | Image version to pull     | quay.io/centos/centos:stream9              |
 
 Example of customization could be:
@@ -36,4 +36,4 @@ spec:
   init_projects_container_image: myorg/my-mirrored-centos:stream9
 ```
 
-**Note**: The `image` and `image_version` are intended for local mirroring scenarios. Please note that using a version of AWX other than the one bundled with the `awx-operator` is **not** supported. For the default values, check the [main.yml](https://github.com/ansible/awx-operator/blob/devel/roles/installer/defaults/main.yml) file.
+**Note**: The `image` and `image_version` are intended for local mirroring scenarios. `DEFAULT_AWX_VERSION` controls the main Ascender image tag, but the bundled execution environment defaults remain pinned to `ghcr.io/ctrliq/ascender-ee:latest` unless you override them explicitly. For the current defaults, check [roles/installer/defaults/main.yml](/home/weyerkaa/ascender-operator/roles/installer/defaults/main.yml).

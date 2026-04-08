@@ -281,8 +281,6 @@ init_container_extra_volume_mounts: ''
 ee_images:
   - name: "AWX EE (latest)"
     image: "ghcr.io/ctrliq/ascender-ee:latest"
-  - name: "AWX EE ({{ _image_version }})"
-    image: "ghcr.io/ctrliq/ascender-ee:{{ _image_version }}"
 
 _control_plane_ee_image: "ghcr.io/ctrliq/ascender-ee:latest"
 
