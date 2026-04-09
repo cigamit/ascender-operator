@@ -37,12 +37,6 @@ backup_resource_requirements:
     cpu: "25m"
     memory: "32Mi"
 # Allow additional parameters to be added to the pg_dump backup command
-# Init container commands to fix PV permissions for non-OpenShift clusters
-backup_init_container_commands: |
-  set -e
-  chown 26:0 /backups
-  chmod 700 /backups
-
 pg_dump_suffix: ''
 
 # Labels defined on the resource, which should be propagated to child resources
