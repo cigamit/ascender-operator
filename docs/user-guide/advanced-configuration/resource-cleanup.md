@@ -2,7 +2,7 @@
 
 ### Deployment Revision History
 
-Kubernetes retains old ReplicaSets from Deployments to allow rollbacks. By default, Ascender limits this to **2** old ReplicaSets per Deployment (web, task, mesh ingress, and controller-manager). You can adjust this with `revision_history_limit`.
+Kubernetes retains old ReplicaSets from Deployments to allow rollbacks. By default, Ascender limits this to **2** old ReplicaSets per Deployment (web, task, mesh ingress, and controller-manager). You can adjust this with `revision_history_limit` for all except the controller-manager (its hard coded).
 
 | Name                   | Description                                                               | Default |
 | ---------------------- | ------------------------------------------------------------------------- | ------- |
