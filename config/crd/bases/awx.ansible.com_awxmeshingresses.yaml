@@ -82,6 +82,8 @@ spec:
                 description: The number of old ReplicaSets to retain for rollback on the mesh ingress deployment.
                 type: integer
                 format: int32
+                default: 2
+                minimum: 0
               tolerations:
                 description: Scheduling tolerations for the Mesh Ingress instance.
                 type: string

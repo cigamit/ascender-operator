@@ -225,6 +225,8 @@ spec:
                 description: The number of old ReplicaSets to retain for rollback on web and task deployments.
                 type: integer
                 format: int32
+                default: 2
+                minimum: 0
               tolerations:
                 description: node tolerations for the pods
                 type: string

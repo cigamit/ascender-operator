@@ -212,8 +212,8 @@ task_annotations: ''
 #   my.web-annotation/2: value2
 web_annotations: ''
 
-# Number of old ReplicaSets to retain for rollback. Applies to web, task, and
-# mesh ingress deployments.
+# Number of old ReplicaSets to retain for rollback. Applies to web and
+# task deployments.
 revision_history_limit: 2
 
 admin_user: admin
