@@ -495,3 +495,8 @@ nginx_worker_cpu_affinity: 'auto'
 nginx_listen_queue_size: "{{ uwsgi_listen_queue_size }}"
 
 extra_settings_files: {}
+
+# Time in seconds before a finished migration Job is automatically deleted.
+# Defaults to 1 day (86400 seconds). Set to 0 for immediate cleanup.
+# migration_job_ttl: 86400
+migration_job_ttl: 86400

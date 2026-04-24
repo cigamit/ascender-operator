@@ -227,6 +227,12 @@ spec:
                 format: int32
                 default: 2
                 minimum: 0
+              migration_job_ttl:
+                description: Number of seconds after which a finished migration Job will be automatically deleted. Defaults to 1 day (86400).
+                type: integer
+                format: int32
+                default: 86400
+                minimum: 0
               tolerations:
                 description: node tolerations for the pods
                 type: string

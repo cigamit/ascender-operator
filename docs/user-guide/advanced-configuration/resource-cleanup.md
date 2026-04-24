@@ -16,3 +16,20 @@ spec:
 ```
 
 Setting this to `0` will cause Kubernetes to garbage-collect all old ReplicaSets immediately, which prevents rollbacks but keeps the cluster tidy.
+
+### Migration Job Cleanup
+
+Kubernetes can automatically delete finished migration Jobs after a configurable period via `ttlSecondsAfterFinished`. By default, Ascender sets this to **86400 seconds (1 day)**. You can adjust this with `migration_job_ttl`.
+
+| Name              | Description                                                            | Default |
+| ----------------- | ---------------------------------------------------------------------- | ------- |
+| migration_job_ttl | Seconds after which finished migration Jobs are automatically deleted  | 86400   |
+
+Example configuration:
+
+```yaml
+spec:
+  migration_job_ttl: 3600  # delete after 1 hour
+```
+
+Setting this to `0` will delete the Job immediately after it finishes.
