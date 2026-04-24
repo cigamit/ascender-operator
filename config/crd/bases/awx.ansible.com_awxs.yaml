@@ -221,6 +221,10 @@ spec:
               web_annotations:
                 description: Web deployment annotations. This will override the general annotations parameter for the Web deployment.
                 type: string
+              revision_history_limit:
+                description: The number of old ReplicaSets to retain for rollback on web and task deployments.
+                type: integer
+                format: int32
               tolerations:
                 description: node tolerations for the pods
                 type: string

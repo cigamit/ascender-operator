@@ -19,3 +19,6 @@ node_selector: ''
 topology_spread_constraints: ''
 tolerations: ''
 affinity: {}
+
+# Number of old ReplicaSets to retain for rollback.
+revision_history_limit: 2

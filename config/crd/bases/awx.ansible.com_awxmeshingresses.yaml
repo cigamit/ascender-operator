@@ -78,6 +78,10 @@ spec:
               node_selector:
                 description: Assign the Mesh Ingress Pod to the specified node.
                 type: string
+              revision_history_limit:
+                description: The number of old ReplicaSets to retain for rollback on the mesh ingress deployment.
+                type: integer
+                format: int32
               tolerations:
                 description: Scheduling tolerations for the Mesh Ingress instance.
                 type: string

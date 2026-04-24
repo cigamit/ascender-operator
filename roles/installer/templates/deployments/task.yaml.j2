@@ -13,6 +13,7 @@ spec:
 {% elif replicas != '' and task_manage_replicas | bool %}
   replicas: {{ replicas }}
 {% endif %}
+  revisionHistoryLimit: {{ revision_history_limit }}
   selector:
     matchLabels:
       app.kubernetes.io/name: '{{ ansible_operator_meta.name }}-task'
