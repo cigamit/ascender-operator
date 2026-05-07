@@ -331,9 +331,10 @@ ee_resource_requirements:
 
 # TODO: validate default resource requirements
 
-# Customize CSRF options
+# Customize cookie and schedule options
 csrf_cookie_secure: False
 session_cookie_secure: False
+disable_all_schedules: False
 
 # Assign a preexisting priority class to the control plane pods
 control_plane_priority_class: ''

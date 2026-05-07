@@ -78,6 +78,7 @@ nav:
       - user-guide/advanced-configuration/exporting-environment-variables-to-containers.md
       - user-guide/advanced-configuration/csrf-cookie-secure-setting.md
       - user-guide/advanced-configuration/session-cookie-secure-setting.md
+      - user-guide/advanced-configuration/disable-all-schedules-setting.md
       - user-guide/advanced-configuration/extra-settings.md
       - user-guide/advanced-configuration/no-log.md
       - user-guide/advanced-configuration/auto-upgrade.md
