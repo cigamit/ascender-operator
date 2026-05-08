@@ -2,7 +2,7 @@
 
 With `disable_all_schedules`, you can pass the value for `DISABLE_ALL_SCHEDULES` to `/etc/tower/settings.py`.
 
-Set this to `True` when restoring into disaster recovery so schedules stay disabled after the application starts.  You are still able to manually run and test jobs, but any scheduled jobs 
+Set this to `True` when restoring into disaster recovery so schedules stay disabled after the application starts.  You are still able to manually run and test jobs, but any scheduled jobs will not execute, and will show as disabled in the UI.
 
 
 | Name                  | Description               | Default |
