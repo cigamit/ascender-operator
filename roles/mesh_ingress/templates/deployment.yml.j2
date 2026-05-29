@@ -13,6 +13,14 @@ spec:
       labels:
         app.kubernetes.io/name: {{ ansible_operator_meta.name }}
     spec:
+{% if restricted_security_context | bool %}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+{% endif %}
 {% if image_pull_secrets | length > 0 %}
       imagePullSecrets:
 {% for secret in image_pull_secrets %}
@@ -55,6 +63,13 @@ spec:
         image: '{{ _control_plane_ee_image }}'
         imagePullPolicy: '{{ _image_pull_policy }}'
         name: {{ ansible_operator_meta.name }}-mesh-ingress
+{% if restricted_security_context | bool %}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+{% endif %}
         volumeMounts:
         - mountPath: /etc/receptor/receptor.conf
           name: {{ ansible_operator_meta.name }}-receptor-config

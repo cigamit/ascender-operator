@@ -64,6 +64,7 @@ nav:
       - user-guide/advanced-configuration/deploying-a-specific-version-of-awx.md
       - user-guide/advanced-configuration/redis-container-capabilities.md
       - user-guide/advanced-configuration/privileged-tasks.md
+      - user-guide/advanced-configuration/security-context.md
       - user-guide/advanced-configuration/containers-resource-requirements.md
       - user-guide/advanced-configuration/priority-classes.md
       - user-guide/advanced-configuration/adding-execution-nodes.md

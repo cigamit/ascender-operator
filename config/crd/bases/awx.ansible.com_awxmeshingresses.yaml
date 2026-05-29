@@ -41,6 +41,10 @@ spec:
               deployment_name:
                 description: Name of the AWX deployment to create the Mesh Ingress for.
                 type: string
+              restricted_security_context:
+                description: Render the Mesh Ingress pod to satisfy the Pod Security Admission "restricted" standard. Defaults to false.
+                type: boolean
+                default: false
               image_pull_secrets:
                 description: Image pull secrets for Mesh Ingress containers.
                 type: array

@@ -47,7 +47,14 @@ spec:
 {% if postgres_priority_class is defined %}
       priorityClassName: '{{ postgres_priority_class }}'
 {% endif %}
-{% if postgres_data_volume_init and not is_openshift %}
+{% if restricted_security_context | bool %}
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 26
+        seccompProfile:
+          type: RuntimeDefault
+{% endif %}
+{% if postgres_data_volume_init and not is_openshift and not (restricted_security_context | bool) %}
       initContainers:
         - name: init
           image: '{{ _postgres_image }}'
@@ -72,9 +79,17 @@ spec:
         - image: '{{ _postgres_image }}'
           imagePullPolicy: '{{ image_pull_policy }}'
           name: postgres
-{% if postgres_security_context_settings|length %}
+{% if (restricted_security_context | bool) or (postgres_security_context_settings|length) %}
           securityContext:
+{% if restricted_security_context | bool %}
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+{% endif %}
+{% if postgres_security_context_settings|length %}
             {{ postgres_security_context_settings | to_nice_yaml | indent(12) }}
+{% endif %}
 {% endif %}
 {% if postgres_extra_args %}
           command: ["run-postgresql"]

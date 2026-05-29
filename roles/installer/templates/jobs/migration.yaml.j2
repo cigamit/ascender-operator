@@ -20,6 +20,13 @@ spec:
           image: '{{ _init_container_image }}'
           imagePullPolicy: '{{ image_pull_policy }}'
           resources: {{ init_container_resource_requirements }}
+{% if restricted_security_context | bool %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+{% endif %}
           command:
             - /bin/sh
             - -c
@@ -37,6 +44,13 @@ spec:
       containers:
         - name: "migration-job"
           image: '{{ _image }}'
+{% if restricted_security_context | bool %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+{% endif %}
           command:
             - awx-manage
             - migrate
@@ -100,6 +114,10 @@ spec:
 {% elif affinity %}
       affinity:
         {{ affinity | to_nice_yaml | indent(width=8) }}
+{% endif %}
+{% if restricted_security_context | bool %}
+      securityContext:
+        {{ ({'runAsNonRoot': true, 'runAsUser': 1000, 'fsGroup': 1000, 'seccompProfile': {'type': 'RuntimeDefault'}} | combine(security_context_settings)) | to_nice_yaml | indent(8) }}
 {% endif %}
       volumes:
         - name: "{{ ansible_operator_meta.name }}-application-credentials"

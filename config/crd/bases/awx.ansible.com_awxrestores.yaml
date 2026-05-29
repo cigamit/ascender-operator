@@ -52,6 +52,10 @@ spec:
                 description: Name of the restored deployment. This should be different from the original deployment name
                   if the original deployment still exists.
                 type: string
+              restricted_security_context:
+                description: Render the database management pod to satisfy the Pod Security Admission "restricted" standard. Defaults to false.
+                type: boolean
+                default: false
               cluster_name:
                 description: Cluster name
                 type: string

@@ -80,6 +80,13 @@ spec:
           image: '{{ _init_container_image }}'
           imagePullPolicy: '{{ image_pull_policy }}'
           resources: {{ init_container_resource_requirements }}
+{% if restricted_security_context | bool %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+{% endif %}
           command:
             - /bin/sh
             - -c
@@ -98,6 +105,13 @@ spec:
           image: '{{ _image }}'
           imagePullPolicy: '{{ image_pull_policy }}'
           resources: {{ init_container_resource_requirements }}
+{% if restricted_security_context | bool %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+{% endif %}
           command:
             - /bin/sh
             - -c
@@ -128,6 +142,13 @@ spec:
           image: '{{ _init_container_image }}'
           imagePullPolicy: '{{ image_pull_policy }}'
           resources: {{ init_container_resource_requirements }}
+{% if restricted_security_context | bool %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+{% endif %}
           command:
             - /bin/sh
             - -c
@@ -178,6 +199,13 @@ spec:
           image: '{{ _init_projects_container_image }}'
           imagePullPolicy: '{{ image_pull_policy }}'
           resources: {{ init_container_resource_requirements }}
+{% if restricted_security_context | bool %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+{% endif %}
           command:
             - /bin/sh
             - -c
@@ -197,10 +225,19 @@ spec:
         - image: '{{ _redis_image }}'
           imagePullPolicy: '{{ image_pull_policy }}'
           name: redis
-{% if redis_capabilities is defined and redis_capabilities %}
+{% if (restricted_security_context | bool) or (redis_capabilities is defined and redis_capabilities) %}
           securityContext:
+{% if restricted_security_context | bool %}
+            allowPrivilegeEscalation: false
+{% endif %}
             capabilities:
+{% if restricted_security_context | bool %}
+              drop:
+                - ALL
+{% endif %}
+{% if redis_capabilities is defined and redis_capabilities %}
               add: {{ redis_capabilities }}
+{% endif %}
 {% endif %}
           args: ["valkey-server", "/etc/valkey.conf"]
           volumeMounts:
@@ -236,6 +273,12 @@ spec:
 {% if task_privileged == true %}
           securityContext:
             privileged: true
+{% elif restricted_security_context | bool %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
 {% endif %}
 {% if task_command %}
           command: {{ task_command }}
@@ -356,6 +399,13 @@ spec:
         - image: '{{ _control_plane_ee_image }}'
           name: '{{ ansible_operator_meta.name }}-ee'
           imagePullPolicy: '{{ image_pull_policy }}'
+{% if restricted_security_context | bool %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+{% endif %}
           resources: {{ ee_resource_requirements }}
           args:
             - /bin/sh
@@ -417,6 +467,13 @@ spec:
 {% endif %}
         - image: '{{ _image }}'
           name: '{{ ansible_operator_meta.name }}-rsyslog'
+{% if restricted_security_context | bool %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+{% endif %}
 {% if rsyslog_command %}
           command: {{ rsyslog_command }}
 {% endif %}
@@ -504,13 +561,17 @@ spec:
       affinity:
         {{ affinity | to_nice_yaml | indent(width=8) }}
 {% endif %}
-{% if (projects_persistence|bool and is_k8s|bool) or (security_context_settings|length) %}
+{% if (restricted_security_context | bool) or (projects_persistence|bool and is_k8s|bool) or (security_context_settings|length) %}
       securityContext:
+{% if restricted_security_context | bool %}
+        {{ ({'runAsNonRoot': true, 'runAsUser': 1000, 'fsGroup': 1000, 'seccompProfile': {'type': 'RuntimeDefault'}} | combine(security_context_settings)) | to_nice_yaml | indent(8) }}
+{% else %}
 {% if projects_persistence|bool and is_k8s|bool %}
         fsGroup: 1000
 {% endif %}
 {% if security_context_settings|length %}
         {{ security_context_settings | to_nice_yaml | indent(8) }}
+{% endif %}
 {% endif %}
 {% endif %}
 {% if termination_grace_period_seconds is defined %}

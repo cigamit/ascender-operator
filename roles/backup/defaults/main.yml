@@ -14,6 +14,9 @@ backup_storage_requirements: ''
 # Set no_log settings on certain tasks
 no_log: true
 
+# Render the database management pod to satisfy Pod Security Admission "restricted". Opt-in.
+restricted_security_context: false
+
 # Variable to set when you want backups to be cleaned up when the CRD object is deleted
 clean_backup_on_delete: false
 

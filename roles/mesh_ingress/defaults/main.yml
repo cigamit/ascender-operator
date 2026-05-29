@@ -13,6 +13,9 @@ _control_plane_ee_image: "ghcr.io/ctrliq/ascender-ee:latest"
 _image_pull_policy: Always
 image_pull_secrets: []
 
+# Render the Mesh Ingress pod to satisfy Pod Security Admission "restricted". Opt-in.
+restricted_security_context: false
+
 finalizer_run: false
 
 node_selector: ''

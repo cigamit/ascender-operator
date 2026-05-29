@@ -7,10 +7,24 @@ metadata:
   labels:
     {{ lookup("template", "../common/templates/labels/common.yaml.j2") | indent(width=4) | trim }}
 spec:
+{% if restricted_security_context | bool %}
+  securityContext:
+    runAsNonRoot: true
+    fsGroup: 26
+    seccompProfile:
+      type: RuntimeDefault
+{% endif %}
   containers:
   - name: {{ ansible_operator_meta.name }}-db-management
     image: "{{ _postgres_image }}"
     imagePullPolicy: "{{ image_pull_policy }}"
+{% if restricted_security_context | bool %}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+{% endif %}
     command: ["sleep", "infinity"]
     volumeMounts:
     - name: {{ ansible_operator_meta.name }}-backup

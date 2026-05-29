@@ -456,6 +456,10 @@ development_mode: false
 security_context_settings: {}
 postgres_security_context_settings: {}
 
+# Render pods to satisfy Pod Security Admission "restricted". Opt-in; false
+# keeps existing behavior. task_privileged and redis_capabilities still apply.
+restricted_security_context: false
+
 # Set no_log settings on certain tasks
 no_log: true
 

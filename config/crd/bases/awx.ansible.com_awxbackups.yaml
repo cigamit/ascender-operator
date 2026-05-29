@@ -45,6 +45,10 @@ spec:
               deployment_name:
                 description: Name of the deployment to be backed up
                 type: string
+              restricted_security_context:
+                description: Render the database management pod to satisfy the Pod Security Admission "restricted" standard. Defaults to false.
+                type: boolean
+                default: false
               backup_pvc:
                 description: Name of the backup PVC
                 type: string
