@@ -43,6 +43,6 @@ jobs:
         working-directory: ascender-operator
         run: |
           BUILD_ARGS="--build-arg DEFAULT_AWX_VERSION=latest \
-              --build-arg OPERATOR_VERSION=${{ steps.date.outputs.day }}+git${{ steps.short-sha.outputs.sha }}" \
-          IMG=ghcr.io/${{ github.repository }}_devel:${{ steps.date.outputs.day }}+git${{ steps.short-sha.outputs.sha }} \
+              --build-arg OPERATOR_VERSION=${{ steps.date.outputs.year }}.${{ steps.date.outputs.month }}.${{ steps.date.outputs.day }}+git${{ steps.short-sha.outputs.sha }}" \
+          IMG=ghcr.io/${{ github.repository }}_devel:${{ steps.date.outputs.year }}.${{ steps.date.outputs.month }}.${{ steps.date.outputs.day }}+git${{ steps.short-sha.outputs.sha }} \
           make docker-buildx
