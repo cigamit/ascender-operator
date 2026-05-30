@@ -22,7 +22,7 @@ spec:
         spec:
 {% if restricted_security_context | bool %}
           securityContext:
-            {{ ({'runAsNonRoot': true, 'runAsUser': 1000, 'fsGroup': 1000, 'seccompProfile': {'type': 'RuntimeDefault'}} | combine(security_context_settings)) | to_nice_yaml | indent(12) }}
+            {{ ({'runAsNonRoot': true, 'seccompProfile': {'type': 'RuntimeDefault'}} | combine({'runAsUser': 1000, 'fsGroup': 1000} if not is_openshift else {}) | combine(security_context_settings)) | to_nice_yaml | indent(12) }}
 {% endif %}
 {% if image_pull_secret is defined %}
           imagePullSecrets:

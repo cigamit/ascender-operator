@@ -15,6 +15,12 @@
           - 'app.kubernetes.io/name in (example-awx-web, example-awx-task)'
       register: restricted_deployments
 
+    - name: Assert both the web and task deployments were found
+      ansible.builtin.assert:
+        that:
+          - restricted_deployments.resources | length == 2
+        fail_msg: 'expected 2 deployments (web, task), found {{ restricted_deployments.resources | length }}'
+
     - name: Assert each pod runs as non-root with the RuntimeDefault seccomp profile
       ansible.builtin.assert:
         that:

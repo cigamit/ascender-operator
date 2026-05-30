@@ -10,7 +10,9 @@ spec:
 {% if restricted_security_context | bool %}
   securityContext:
     runAsNonRoot: true
+{% if not is_openshift %}
     fsGroup: 26
+{% endif %}
     seccompProfile:
       type: RuntimeDefault
 {% endif %}

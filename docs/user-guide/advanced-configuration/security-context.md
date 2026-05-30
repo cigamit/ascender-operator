@@ -39,4 +39,6 @@ spec:
 
 `task_privileged` and `redis_capabilities` are still honored, and `security_context_settings` is merged last so it overrides these defaults. The managed postgres is made compliant for its default image; for a different image set `runAsUser` via `postgres_security_context_settings`, or use an external database.
 
+On OpenShift, `runAsUser` and `fsGroup` are omitted so the cluster's SCC assigns them from the namespace's allocated range; `runAsNonRoot` and the `RuntimeDefault` seccomp profile are still applied. This avoids the pod being rejected for requesting a fixed UID/GID outside that range.
+
 This option only covers operator-managed pods. Automation job pods are created at runtime from the container group's pod spec, which the operator does not manage, so to run jobs in a `restricted` namespace you must also set a compliant `pod_spec_override` on the container group.
