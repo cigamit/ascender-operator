@@ -258,7 +258,7 @@ spec:
             preStop:
               exec:
                 command:
-                - bash
+                - sh
                 - -c
                 # redis image doesn't support writing to `/proc/1/fd/*`
                 - >
