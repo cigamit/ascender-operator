@@ -1,8 +1,8 @@
 FROM quay.io/operator-framework/ansible-operator:main
 
 USER root
-RUN dnf update --security --bugfix -y && \
-    dnf install -y openssl
+RUN microdnf update -y && \
+    microdnf install -y openssl
 
 USER 1001
 
