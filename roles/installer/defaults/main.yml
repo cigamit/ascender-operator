@@ -283,10 +283,10 @@ init_container_extra_commands: ''
 init_container_extra_volume_mounts: ''
 
 ee_images:
-  - name: "Ascender EE (latest)"
-    image: "ghcr.io/ctrliq/ascender-ee:latest"
+  - name: "Ascender EE ({{ lookup('env', 'DEFAULT_AWX_VERSION') or 'latest' }})"
+    image: "ghcr.io/ctrliq/ascender-ee:{{ lookup('env', 'DEFAULT_AWX_VERSION') or 'latest' }}"
 
-_control_plane_ee_image: "ghcr.io/ctrliq/ascender-ee:latest"
+_control_plane_ee_image: "ghcr.io/ctrliq/ascender-ee:{{ lookup('env', 'DEFAULT_AWX_VERSION') or 'latest' }}"
 
 _init_container_image: "{{ _control_plane_ee_image.split(':')[0] }}"
 _init_container_image_version: "{{ _control_plane_ee_image.split(':')[1] }}"

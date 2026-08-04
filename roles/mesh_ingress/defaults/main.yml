@@ -9,7 +9,7 @@ ingress_controller: ''
 
 set_self_owneref: true
 
-_control_plane_ee_image: "ghcr.io/ctrliq/ascender-ee:latest"
+_control_plane_ee_image: "ghcr.io/ctrliq/ascender-ee:{{ lookup('env', 'DEFAULT_AWX_VERSION') or 'latest' }}"
 _image_pull_policy: Always
 image_pull_secrets: []
 
