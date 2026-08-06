@@ -4,7 +4,7 @@
 The control nodes on the K8S cluster will communicate with execution nodes via mutual TLS TCP connections, running via Receptor.
 Execution nodes will verify incoming connections by ensuring the x509 certificate was issued by a trusted Certificate Authority (CA).
 
-A user may wish to provide their own CA for this validation. If no CA is provided, AWX Operator will automatically generate one using OpenSSL.
+A user may wish to provide their own CA for this validation. If no CA is provided, Ascender Operator will automatically generate one using OpenSSL.
 
 Given custom `ca.crt` and `ca.key` stored locally, run the following,
 

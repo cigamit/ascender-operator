@@ -55,7 +55,7 @@ For instructions on how to migrate from an older version of AWX, see [migration.
 
 #### Managed PostgreSQL Service
 
-If you don't have access to an external PostgreSQL service, the AWX operator can deploy one for you along side the AWX instance itself.
+If you don't have access to an external PostgreSQL service, the Ascender operator can deploy one for you alongside the Ascender instance itself.
 
 The following variables are customizable for the managed PostgreSQL service
 

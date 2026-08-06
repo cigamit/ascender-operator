@@ -1,7 +1,7 @@
 ---
-site_name: Ansible AWX Operator Documentation
+site_name: Ascender Operator Documentation
 site_url: https://awx-operator.readthedocs.io/
-repo_url: https://github.com/ansible/awx-operator
+repo_url: https://github.com/ctrliq/ascender-operator
 edit_uri: blob/devel/docs/
 docs_dir: docs
 strict: true

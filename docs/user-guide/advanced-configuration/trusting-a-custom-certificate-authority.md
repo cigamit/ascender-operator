@@ -1,6 +1,6 @@
 #### Trusting a Custom Certificate Authority
 
-In cases which you need to trust a custom Certificate Authority, there are few variables you can customize for the `awx-operator`.
+In cases which you need to trust a custom Certificate Authority, there are few variables you can customize for the `ascender-operator`.
 
 Trusting a custom Certificate Authority allows the AWX to access network services configured with SSL certificates issued locally, such as cloning a project from from an internal Git server via HTTPS. It is common for these scenarios, experiencing the error [unable to verify the first certificate](https://github.com/ansible/awx-operator/issues/376).
 
@@ -10,7 +10,7 @@ Trusting a custom Certificate Authority allows the AWX to access network service
 | ldap_cacert_secret               | LDAP Certificate Authority secret name   |  ''     |
 | ldap_password_secret             | LDAP BIND DN Password secret name        |  ''     |
 | bundle_cacert_secret             | Certificate Authority secret name        |  ''     |
-Please note the `awx-operator` will look for the data field `ldap-ca.crt` in the specified secret when using the `ldap_cacert_secret`, whereas the data field `bundle-ca.crt` is required for `bundle_cacert_secret` parameter.
+Please note the `ascender-operator` will look for the data field `ldap-ca.crt` in the specified secret when using the `ldap_cacert_secret`, whereas the data field `bundle-ca.crt` is required for `bundle_cacert_secret` parameter.
 
 Example of customization could be:
 

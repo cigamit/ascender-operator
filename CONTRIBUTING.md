@@ -1,12 +1,12 @@
-# AWX-Operator Contributing Guidelines
+# Ascender-Operator Contributing Guidelines
 
 Hi there! We're excited to have you as a contributor.
 
-Have questions about this document or anything not covered here? Please file a new at [https://github.com/ansible/awx-operator/issues](https://github.com/ansible/awx-operator/issues).
+Have questions about this document or anything not covered here? Please file a new issue at [https://github.com/ctrliq/ascender-operator/issues](https://github.com/ctrliq/ascender-operator/issues).
 
 ## Table of contents
 
-- [AWX-Operator Contributing Guidelines](#awx-operator-contributing-guidelines)
+- [Ascender-Operator Contributing Guidelines](#ascender-operator-contributing-guidelines)
   - [Table of contents](#table-of-contents)
   - [Things to know prior to submitting code](#things-to-know-prior-to-submitting-code)
   - [Submmiting your work](#submmiting-your-work)
@@ -38,7 +38,7 @@ Have questions about this document or anything not covered here? Please file a n
 #> git add <FILES>
 #> git commit -m "My message here"
 ```
-5. Create your [pull request](https://github.com/ansible/awx-operator/pulls)
+5. Create your [pull request](https://github.com/ctrliq/ascender-operator/pulls)
 
 **Note**: If you have multiple commits, make sure to `squash` your commits into a single commit which will facilitate our release process.
 
@@ -60,7 +60,7 @@ If you want to actively develop the operator, use `molecule converge`, which doe
 
 #### Testing in Kind
 
-Testing with a kind cluster is the recommended way to test the awx-operator locally. First, you need to install kind if you haven't already. Please see these docs for setting that up:
+Testing with a kind cluster is the recommended way to test the ascender-operator locally. First, you need to install kind if you haven't already. Please see these docs for setting that up:
 * https://kind.sigs.k8s.io/docs/user/quick-start/
 
 To run the tests, from the root of your checkout, run the following command:
@@ -79,12 +79,12 @@ To run the tests, from the root of your checkout, run the following command:
 
 [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/) is a more full-featured test environment running inside a full VM on your computer, with an assigned IP address. This makes it easier to test things like NodePort services and Ingress from outside the Kubernetes cluster (e.g. in a browser on your computer).
 
-Once the operator is deployed, you can visit the AWX UI in your browser by following these steps:
+Once the operator is deployed, you can visit the Ascender UI in your browser by following these steps:
 
   1. Make sure you have an entry like `IP_ADDRESS  example-awx.test` in your `/etc/hosts` file. (Get the IP address with `minikube ip`.)
   2. Visit `http://example-awx.test/` in your browser. (Default admin login is `test`/`changeme`.)
 
-Alternatively, you can also update the service `awx-service` in your namespace to use the type `NodePort` and use following command to get the URL to access your AWX instance:
+Alternatively, you can also update the service `ascender-service` in your namespace to use the type `NodePort` and use following command to get the URL to access your Ascender instance:
 
 ```sh
 #> minikube service <serviceName> -n <namespaceName> --url
@@ -101,25 +101,25 @@ At the root of this directory:
 1. Build and publish the operator
 
 ```
-#> operator-sdk build registry.example.com/ansible/awx-operator:mytag
-#> podman push registry.example.com/ansible/awx-operator:mytag
+#> operator-sdk build registry.example.com/ctrliq/ascender-operator:mytag
+#> podman push registry.example.com/ctrliq/ascender-operator:mytag
 ```
 
 2. Build and publish the bundle
 
 ```
-#> podman build . -f bundle.Dockerfile -t registry.example.com/ansible/awx-operator-bundle:mytag
-#> podman push registry.example.com/ansible/awx-operator-bundle:mytag
+#> podman build . -f bundle.Dockerfile -t registry.example.com/ctrliq/ascender-operator-bundle:mytag
+#> podman push registry.example.com/ctrliq/ascender-operator-bundle:mytag
 ```
 
 3. Build and publish an index with your bundle in it
 
 ```
-#> opm index add --bundles registry.example.com/ansible/awx-operator-bundle:mytag --tag registry.example.com/ansible/awx-operator-catalog:mytag
-#> podman push registry.example.com/ansible/awx-operator-catalog:mytag
+#> opm index add --bundles registry.example.com/ctrliq/ascender-operator-bundle:mytag --tag registry.example.com/ctrliq/ascender-operator-catalog:mytag
+#> podman push registry.example.com/ctrliq/ascender-operator-catalog:mytag
 ```
 
-4. In your Kubernetes create a new CatalogSource pointing to `registry.example.com/ansible/awx-operator-catalog:mytag`
+4. In your Kubernetes create a new CatalogSource pointing to `registry.example.com/ctrliq/ascender-operator-catalog:mytag`
 
 ```
 ---
@@ -130,7 +130,7 @@ metadata:
   namespace: <namespace>
 spec:
   displayName: 'myoperatorhub'
-  image: registry.example.com/ansible/awx-operator-catalog:mytag
+  image: registry.example.com/ctrliq/ascender-operator-catalog:mytag
   publisher: 'myoperatorhub'
   sourceType: grpc
 ```

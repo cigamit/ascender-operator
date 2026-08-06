@@ -1,4 +1,4 @@
-# AWX Operator on Kind
+# Ascender Operator on Kind
 
 ## Kind Install
 
@@ -66,22 +66,22 @@ Checkout the tag you want to install from
 git checkout 2.7.2
 ```
 
-Create a file named `kustomization.yaml` in the root of your local awx-operator clone. Include the following:
+Create a file named `kustomization.yaml` in the root of your local ascender-operator clone. Include the following:
 
 ```
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  # Find the latest tag here: https://github.com/ansible/awx-operator/releases
-  - github.com/ansible/awx-operator/config/default?ref=2.7.2
+  # Find the latest tag here: https://github.com/ctrliq/ascender-operator/releases
+  - github.com/ctrliq/ascender-operator/config/default?ref=2.7.2
 
 # Set the image tags to match the git version from above
 images:
-  - name: quay.io/ansible/awx-operator
+  - name: ghcr.io/ctrliq/ascender-operator
     newTag: 2.7.2
 
 # Specify a custom namespace in which to install AWX
-namespace: awx
+namespace: ascender
 ```
 
 Run the following to apply the yaml

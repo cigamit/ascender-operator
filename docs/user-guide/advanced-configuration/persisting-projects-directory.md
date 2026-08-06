@@ -1,6 +1,6 @@
 #### Persisting Projects Directory
 
-In cases which you want to persist the `/var/lib/projects` directory, there are few variables that are customizable for the `awx-operator`.
+In cases which you want to persist the `/var/lib/projects` directory, there are few variables that are customizable for the `ascender-operator`.
 
 | Name                         | Description                                                                                    | Default       |
 | ---------------------------- | ---------------------------------------------------------------------------------------------- | ------------- |
@@ -10,7 +10,7 @@ In cases which you want to persist the `/var/lib/projects` directory, there are 
 | projects_storage_access_mode | Define the PersistentVolume access mode                                                        | ReadWriteMany |
 | projects_existing_claim      | Define an existing PersistentVolumeClaim to use (cannot be combined with `projects_storage_*`) | ''            |
 
-Example of customization when the `awx-operator` automatically handles the persistent volume could be:
+Example of customization when the `ascender-operator` automatically handles the persistent volume could be:
 
 ```yaml
 ---

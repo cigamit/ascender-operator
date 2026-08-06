@@ -38,7 +38,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # This variable is used to construct full image tags for bundle and catalog images.
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
-# ansible.com/awx-operator-bundle:$VERSION and ansible.com/awx-operator-catalog:$VERSION.
+# ansible.com/ascender-operator-bundle:$VERSION and ansible.com/ascender-operator-catalog:$VERSION.
 IMAGE_TAG_BASE ?= ghcr.io/ctrliq/ascender-operator
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
@@ -58,13 +58,13 @@ endif
 
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
-NAMESPACE ?= awx
+NAMESPACE ?= ascender
 
 # Helm variables
-CHART_NAME ?= awx-operator
-CHART_DESCRIPTION ?= A Helm chart for the AWX Operator
+CHART_NAME ?= ascender-operator
+CHART_DESCRIPTION ?= A Helm chart for the Ascender Operator
 CHART_OWNER ?= $(GH_REPO_OWNER)
-CHART_REPO ?= awx-operator
+CHART_REPO ?= ascender-operator
 CHART_BRANCH ?= gh-pages
 CHART_DIR ?= gh-pages
 CHART_INDEX ?= index.yaml
@@ -341,7 +341,7 @@ helm-chart-generate: kustomize helm kubectl-slice yq charts
 	rm -rf charts/$(CHART_NAME)
 	# create new chart metadata in Chart.yaml
 	cd charts && \
-		$(HELM) create awx-operator --starter $(shell pwd)/.helm/starter ;\
+		$(HELM) create ascender-operator --starter $(shell pwd)/.helm/starter ;\
 		$(YQ) -i '.version = "$(VERSION)"' $(CHART_NAME)/Chart.yaml ;\
 		$(YQ) -i '.appVersion = "$(VERSION)" | .appVersion style="double"' $(CHART_NAME)/Chart.yaml ;\
 		$(YQ) -i '.description = "$(CHART_DESCRIPTION)"' $(CHART_NAME)/Chart.yaml ;\
@@ -371,13 +371,13 @@ helm-chart-generate: kustomize helm kubectl-slice yq charts
 		$(YQ) -i '.subjects[0].namespace = "{{ .Release.Namespace }}"' $${file};\
 	done
 	# Correct .metadata.name for cluster scoped resources
-	cluster_scoped_files="charts/$(CHART_NAME)/raw-files/clusterrolebinding-awx-operator-proxy-rolebinding.yaml charts/$(CHART_NAME)/raw-files/clusterrole-awx-operator-metrics-reader.yaml charts/$(CHART_NAME)/raw-files/clusterrole-awx-operator-proxy-role.yaml";\
+	cluster_scoped_files="charts/$(CHART_NAME)/raw-files/clusterrolebinding-ascender-operator-proxy-rolebinding.yaml charts/$(CHART_NAME)/raw-files/clusterrole-ascender-operator-metrics-reader.yaml charts/$(CHART_NAME)/raw-files/clusterrole-ascender-operator-proxy-role.yaml";\
 	for file in $${cluster_scoped_files}; do\
 		$(YQ) -i '.metadata.name += "-{{ .Release.Name }}"' $${file};\
 	done
 
 	# Correct the reference for the clusterrolebinding
-	$(YQ) -i '.roleRef.name += "-{{ .Release.Name }}"' 'charts/$(CHART_NAME)/raw-files/clusterrolebinding-awx-operator-proxy-rolebinding.yaml'
+	$(YQ) -i '.roleRef.name += "-{{ .Release.Name }}"' 'charts/$(CHART_NAME)/raw-files/clusterrolebinding-ascender-operator-proxy-rolebinding.yaml'
 	# move all custom resource definitions to crds folder
 	mkdir charts/$(CHART_NAME)/crds
 	mv charts/$(CHART_NAME)/raw-files/customresourcedefinition*.yaml charts/$(CHART_NAME)/crds/.
@@ -389,7 +389,7 @@ helm-chart-generate: kustomize helm kubectl-slice yq charts
 	rm -rf charts/$(CHART_NAME)/raw-files
 
 	# create and populate NOTES.txt
-	@echo "AWX Operator installed with Helm Chart version $(VERSION)" > charts/$(CHART_NAME)/templates/NOTES.txt
+	@echo "Ascender Operator installed with Helm Chart version $(VERSION)" > charts/$(CHART_NAME)/templates/NOTES.txt
 
 	@echo "Helm chart successfully configured for $(CHART_NAME) version $(VERSION)"
 
@@ -399,7 +399,7 @@ helm-package: helm-chart
 	@echo "== Package Current Chart Version =="
 	mkdir -p .cr-release-packages
 	# package the chart and put it in .cr-release-packages dir
-	$(HELM) package ./charts/awx-operator -d .cr-release-packages/$(VERSION)
+	$(HELM) package ./charts/$(CHART_NAME) -d .cr-release-packages/$(VERSION)
 
 # List all tags oldest to newest.
 TAGS := $(shell git ls-remote --tags --sort=version:refname --refs -q | cut -d/ -f3)

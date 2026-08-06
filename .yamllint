@@ -4,7 +4,7 @@ extends: default
 ignore: |
   .cache/
   kustomization.yaml
-  awx-operator.clusterserviceversion.yaml
+  ascender-operator.clusterserviceversion.yaml
   bundle
   .helm/starter
   hacking/

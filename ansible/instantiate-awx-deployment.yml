@@ -1,5 +1,5 @@
 ---
-- name: Deploy an instance of AWX using the awx-operator
+- name: Deploy an instance of Ascender using the ascender-operator
   hosts: localhost
 
   collections:

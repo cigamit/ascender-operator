@@ -1,6 +1,6 @@
 # Extra Settings
 
-With `extra_settings` and `extra_settings_files`, you can pass multiple custom settings to AWX via the AWX Operator.
+With `extra_settings` and `extra_settings_files`, you can pass multiple custom settings to Ascender via the Ascender Operator.
 
 !!! note
     Parameters configured in `extra_settings` or `extra_settings_files` are set as read-only settings in AWX. As a result, they cannot be changed in the UI after deployment.

@@ -44,7 +44,7 @@
       - fail:
           msg: |
             It looks like you may have broken the DEFAULT_AWX_VERSION functionality.
-            This is an environment variable that is set via build arg when releasing awx-operator.
+            This is an environment variable that is set via build arg when releasing ascender-operator.
         when:
           - default_awx_version not in web_image_tags
           - default_awx_version not in task_image_tags

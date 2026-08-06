@@ -1,8 +1,8 @@
-# Building the Ansible AWX Operator Docs
+# Building the Ascender Operator Docs
 
-To build the AWX Operator docs locally:
+To build the Ascender Operator docs locally:
 
-1. Clone the AWX operator repository.
+1. Clone the Ascender operator repository.
 1. Preferrably, create a virtual environment for installing the dependencies.  
    a. `python3 -m venv venv`  
    b. `source venv/bin/activate`

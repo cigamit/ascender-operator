@@ -13,7 +13,7 @@ Requirements
 ------------
 
 This role assumes you are authenticated with an Openshift or Kubernetes cluster:
-  - The awx-operator has been deployed to the cluster
+  - The ascender-operator has been deployed to the cluster
   - AWX is deployed to via the operator
   - An AWX backup is available on a PVC in your cluster (see the backup [README.md](../backup/README.md))
 

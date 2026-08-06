@@ -38,7 +38,7 @@ To deploy a mesh ingress on Kubernetes cluster which has [NGINX Ingress Controll
 
 Note that AWXMeshIngress requires [SSL Passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) enabled which is disabled by default. Ensure it is enabled on your NGINX Ingress Controller.
 
-By specifying `ingress_controller` as `nginx`, AWX Operator will generate Ingress resource that has `nginx.ingress.kubernetes.io/ssl-passthrough` annotation set to `"true"`.
+By specifying `ingress_controller` as `nginx`, Ascender Operator will generate Ingress resource that has `nginx.ingress.kubernetes.io/ssl-passthrough` annotation set to `"true"`.
 
 Example:
 
@@ -62,7 +62,7 @@ spec:
 
 To deploy a mesh ingress on Kubernetes cluster which has [Traefik Kubernetes Ingress provider](https://doc.traefik.io/traefik/providers/kubernetes-ingress/), create the AWXMeshIngress resource on the namespace where your AWX instance is running on.
 
-Note that by deploying following AWXMeshIngress, AWX Operator will generate IngressRouteTCP resource that has `websecure` as an `entryPoints`. If this does not satisfy your requirement, refer to [User managed Ingress section](#on-kubernetes-with-user-managed-ingress) and  create an IngressRouteTCP resource manually.
+Note that by deploying following AWXMeshIngress, Ascender Operator will generate IngressRouteTCP resource that has `websecure` as an `entryPoints`. If this does not satisfy your requirement, refer to [User managed Ingress section](#on-kubernetes-with-user-managed-ingress) and  create an IngressRouteTCP resource manually.
 
 Example:
 

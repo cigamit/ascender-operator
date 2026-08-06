@@ -4,7 +4,7 @@ import nox
 @nox.session
 def build(session: nox.Session):
     """
-    Build the AWX Operator docsite.
+    Build the Ascender Operator docsite.
     """
     session.install(
         "-r",

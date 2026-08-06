@@ -1,11 +1,11 @@
-# AWX Operator Helm Chart
+# Ascender Operator Helm Chart
 
-This chart installs the AWX Operator resources configured in [this](https://github.com/ansible/awx-operator) repository.
+This chart installs the Ascender Operator resources configured in [this](https://github.com/ctrliq/ascender-operator) repository.
 
 ## Getting Started
 To configure your AWX resource using this chart, create your own `yaml` values file. The name is up to personal preference since it will explicitly be passed into the helm chart. Helm will merge whatever values you specify in your file with the default `values.yaml`, overriding any settings you've changed while allowing you to fall back on defaults. Because of this functionality, `values.yaml` should not be edited directly.
 
-In your values config, enable `AWX.enabled` and add `AWX.spec` values based on the awx operator's [documentation](https://github.com/ansible/awx-operator/blob/devel/README.md). Consult the docs below for additional functionality.
+In your values config, enable `AWX.enabled` and add `AWX.spec` values based on the Ascender operator's [documentation](https://github.com/ctrliq/ascender-operator/blob/devel/README.md). Consult the docs below for additional functionality.
 
 ### Installing
 
@@ -14,7 +14,7 @@ The operator's [helm install](https://ansible.readthedocs.io/projects/awx-operat
 Example:
 
 ```bash
-helm install my-awx-operator awx-operator/awx-operator -n awx --create-namespace -f myvalues.yaml
+helm install my-ascender-operator ascender-operator/ascender-operator -n ascender --create-namespace -f myvalues.yaml
 ```
 
 Argument breakdown:
@@ -33,7 +33,7 @@ There is no support at this time for upgrading or deleting CRDs using Helm.  See
 When upgrading to releases with CRD changes use the following command to update the CRDs
 
 ```bash
-kubectl apply --server-side -k github.com/ansible/awx-operator/config/crd?ref=<VERSION>
+kubectl apply --server-side -k github.com/ctrliq/ascender-operator/config/crd?ref=<VERSION>
 ```
 
 If running above command results in an error like below:
@@ -56,11 +56,11 @@ See https://kubernetes.io/docs/reference/using-api/server-side-apply/#conflicts
 Use `--force-conflicts` flag to resolve the conflict.
 
 ```bash
-kubectl apply --server-side --force-conflicts -k github.com/ansible/awx-operator/config/crd?ref=<VERSION>
+kubectl apply --server-side --force-conflicts -k github.com/ctrliq/ascender-operator/config/crd?ref=<VERSION>
 ```
 
 ## Configuration
-The goal of adding helm configurations is to abstract out and simplify the creation of multi-resource configs. The `AWX.spec` field maps directly to the spec configs of the `AWX` resource that the operator provides, which are detailed in the [main README](https://github.com/ansible/awx-operator/blob/devel/README.md). Other sub-config can be added with the goal of simplifying more involved setups that require additional resources to be specified.
+The goal of adding helm configurations is to abstract out and simplify the creation of multi-resource configs. The `AWX.spec` field maps directly to the spec configs of the `AWX` resource that the operator provides, which are detailed in the [main README](https://github.com/ctrliq/ascender-operator/blob/devel/README.md). Other sub-config can be added with the goal of simplifying more involved setups that require additional resources to be specified.
 
 These sub-headers aim to be a more intuitive entrypoint into customizing your deployment, and are easier to manage in the long-term. By design, the helm templates will defer to the manually defined specs to avoid configuration conflicts. For example, if `AWX.spec.postgres_configuration_secret` is being used, the `AWX.postgres` settings will not be applied, even if enabled.
 
@@ -351,7 +351,7 @@ Below the addition variables to customize the secret configuration.
 Where possible, defer to `AWX.spec` configs before applying the abstracted configs to avoid collision. This can be facilitated by the `(hasKey .spec what_i_will_abstract)` check.
 
 ## Building and Testing
-This chart is built using the Makefile in the [awx-operator repo](https://github.com/ansible/awx-operator). Clone the repo and run `make helm-chart`. This will create the awx-operator chart in the `charts/awx-operator` directory. In this process, the contents of the `.helm/starter` directory will be added to the chart.
+This chart is built using the Makefile in the [ascender-operator repo](https://github.com/ctrliq/ascender-operator). Clone the repo and run `make helm-chart`. This will create the ascender-operator chart in the `charts/ascender-operator` directory. In this process, the contents of the `.helm/starter` directory will be added to the chart.
 
 ## Future Goals
 All values under the `AWX` header are focused on configurations that use the operator. Configurations that relate to the Operator itself could be placed under an `Operator` heading, but that may add a layer of complication over current development.
