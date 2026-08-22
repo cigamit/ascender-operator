@@ -21,9 +21,12 @@ Have questions about this document or anything not covered here? Please file a n
 
 - All code submissions are done through pull requests against the `devel` branch.
 - All PRs must have a single commit. Make sure to `squash` any changes into a single commit.
-- Take care to make sure no merge commits are in the submission, and use `git rebase` vs `git merge` for this reason.
-- If collaborating with someone else on the same branch, consider using `--force-with-lease` instead of `--force`. This will prevent you from accidentally overwriting commits pushed by someone else. For more information, see https://git-scm.com/docs/git-push#git-push---force-with-leaseltrefnamegt
-- We ask all of our community members and contributors to adhere to the [Ansible code of conduct](http://docs.ansible.com/ansible/latest/community/code_of_conduct.html). If you have questions, or need assistance, please reach out to our community team at [codeofconduct@ansible.com](mailto:codeofconduct@ansible.com)
+- Keep merge commits out of the submission. Use `git rebase` rather than `git merge`.
+- When collaborating on a shared branch, use `--force-with-lease` instead of `--force`.
+- This prevents you from overwriting commits pushed by someone else.
+- See the [git push documentation](https://git-scm.com/docs/git-push#git-push---force-with-leaseltrefnamegt).
+- All community members and contributors follow the [Ansible code of conduct](http://docs.ansible.com/ansible/latest/community/code_of_conduct.html).
+- For questions or assistance, contact [codeofconduct@ansible.com](mailto:codeofconduct@ansible.com).
 
 
 ## Submmiting your work
@@ -81,7 +84,7 @@ To run the tests, from the root of your checkout, run the following command:
 
 Once the operator is deployed, you can visit the AWX UI in your browser by following these steps:
 
-  1. Make sure you have an entry like `IP_ADDRESS  example-awx.test` in your `/etc/hosts` file. (Get the IP address with `minikube ip`.)
+  1. Add `IP_ADDRESS  example-awx.test` to `/etc/hosts`, using `minikube ip` for the address.
   2. Visit `http://example-awx.test/` in your browser. (Default admin login is `test`/`changeme`.)
 
 Alternatively, you can also update the service `awx-service` in your namespace to use the type `NodePort` and use following command to get the URL to access your AWX instance:
@@ -119,7 +122,7 @@ At the root of this directory:
 #> podman push registry.example.com/ansible/awx-operator-catalog:mytag
 ```
 
-4. In your Kubernetes create a new CatalogSource pointing to `registry.example.com/ansible/awx-operator-catalog:mytag`
+4. In Kubernetes, create a CatalogSource pointing to your catalog image tag.
 
 ```
 ---

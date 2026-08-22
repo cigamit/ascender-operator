@@ -1,49 +1,92 @@
-# AWX Operator
+# Ascender Operator
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Build Status](https://github.com/ansible/awx-operator/workflows/CI/badge.svg?event=push)](https://github.com/ansible/awx-operator/actions)
-[![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-Ansible-yellow.svg)](https://docs.ansible.com/ansible/latest/community/code_of_conduct.html)
-[![AWX Mailing List](https://img.shields.io/badge/mailing%20list-AWX-orange.svg)](https://groups.google.com/g/awx-project)
-[![IRC Chat - #ansible-awx](https://img.shields.io/badge/IRC-%23ansible--awx-blueviolet.svg)](https://libera.chat)
+[![CI](https://github.com/ctrliq/ascender-operator/workflows/CI/badge.svg?event=push)](https://github.com/ctrliq/ascender-operator/actions)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
+[![Operator SDK](https://img.shields.io/badge/built%20with-Operator%20SDK-blue.svg)](https://github.com/operator-framework/operator-sdk)
 
-An [Ansible AWX](https://github.com/ansible/awx) operator for Kubernetes built with [Operator SDK](https://github.com/operator-framework/operator-sdk) and Ansible.
+A Kubernetes operator that deploys and manages [Ascender](https://github.com/ctrliq/ascender), built with the [Operator SDK](https://github.com/operator-framework/operator-sdk) and Ansible. It reconciles Ascender deployments, their backups and restores, and automation mesh ingress, from custom resources you apply to the cluster.
 
-<!-- Regenerate this table of contents using https://github.com/ekalinin/github-markdown-toc -->
-<!-- gh-md-toc --insert README.md -->
-<!--ts-->
+## Requirements
 
-# AWX Operator Documentation
+- A Kubernetes cluster, and `kubectl` configured to reach it
+- `helm`, if installing from the chart
+- `make`, `nox`, and `molecule`, for development and testing
 
-The AWX Operator documentation is now available at https://awx-operator.readthedocs.io/
+## Installation
 
-For docs changes, create PRs on the appropriate files in the /docs folder.
+Most users should not install this directly. The [Ascender installer](https://github.com/ctrliq/ascender-install) deploys it as part of a normal install.
 
+To deploy it on its own:
+
+```bash
+make deploy
+```
+
+## Using the operator
+
+Apply a custom resource describing the deployment you want, then let the operator reconcile it:
+
+```bash
+kubectl apply -f awx-demo.yml
+```
+
+An automation mesh ingress is declared the same way, using [`awxmeshingress-demo.yml`](./awxmeshingress-demo.yml) as the starting point.
+
+## Configuration
+
+Deployment options are set as fields on the custom resource rather than as operator settings. The `config/` directory holds the CRDs, RBAC, and manager manifests, and `.helm/starter` holds the chart used for Helm-based installs.
+
+## Included content
+
+The operator watches four custom resource kinds in the `awx.ansible.com` group:
+
+- **`AWX`**: the Ascender deployment itself, reconciled by the `installer` role
+- **`AWXBackup`**: backup of an existing deployment, including its database
+- **`AWXRestore`**: restore of a deployment from a previously taken backup
+- **`AWXMeshIngress`**: ingress configuration for Ascender automation mesh
+
+## Testing
+
+Molecule drives the operator test suite, orchestrated through nox.
+
+- **Full suite**: `nox`
+- **Molecule directly**: `molecule test`
+
+Smoke tests also run automatically as part of the release workflows, so there is no need to trigger them by hand.
+
+## Release process
+
+Releases normally happen through the Stage Release workflow, which runs smoke tests before publishing.
+
+- The workflow creates a draft release, usually triggered from the Ascender release
+- Publishing the draft runs the promote workflow, which pushes the image and chart
+- To release the operator independently, run Stage Release in this repository
+
+## The Ascender ecosystem
+
+| Repository | Description |
+| ---------- | ----------- |
+| [ascender](https://github.com/ctrliq/ascender) | The platform itself: web UI, REST API, and task engine |
+| [ascender-install](https://github.com/ctrliq/ascender-install) | Installer for Ascender and Ledger, with Galaxy Proxy support |
+| [ascender-k8s-install](https://github.com/ctrliq/ascender-k8s-install) | Kubernetes installer for Ascender, Ledger, and React |
+| [ascender-pro-install](https://github.com/ctrliq/ascender-pro-install) | Enhanced installer adding Reaqt, Registry, and Galaxy Proxy |
+| [ascender-operator](https://github.com/ctrliq/ascender-operator) | Kubernetes operator that deploys and manages Ascender |
+| [ascender-ee](https://github.com/ctrliq/ascender-ee) | Default execution environment image for Ascender jobs |
+| [ascender-kit](https://github.com/ctrliq/ascender-kit) | The `ascender` command line client and Python API library |
+| [ascender-collection](https://github.com/ctrliq/ascender-collection) | The `ctrliq.ascender` Ansible collection for a controller |
+| [ascender-ledger](https://github.com/ctrliq/ascender-ledger) | Reporting tool for host facts and playbook changes |
+| [ascender-galaxy-proxy](https://github.com/ctrliq/ascender-galaxy-proxy) | Caching proxy for Ansible Galaxy collection downloads |
+| [ascender-playbooks](https://github.com/ctrliq/ascender-playbooks) | Example playbooks for use with Ascender |
 ## Contributing
 
-Please visit [our contributing guidelines](https://github.com/ansible/awx-operator/blob/devel/CONTRIBUTING.md).
+- See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, testing, and pull requests.
+- Target the `devel` branch, which is this repository's default and its CI branch.
+- Report bugs and feature ideas via [GitHub Issues](https://github.com/ctrliq/ascender-operator/issues).
+- For security vulnerabilities, follow [SECURITY.md](./SECURITY.md) rather than opening an issue.
+- Join the [Ascender forum](https://forum.ascender-automation.org) to discuss development topics.
 
-## Release Process
+## License
 
-The first step is to create a draft release. Typically this will happen in the [Stage Release](https://github.com/ansible/awx/blob/devel/.github/workflows/stage.yml) workflow for AWX and you don't need to do it as a separate step.
+Licensed under the **Apache License 2.0**. See [LICENSE](./LICENSE) for the full text.
 
-If you need to do an independent release of the operator, you can run the [Stage Release](https://github.com/ansible/awx-operator/blob/devel/.github/workflows/stage.yml) in the awx-operator repo. Both of these workflows will run smoke tests, so there is no need to do this manually.
-
-After the draft release is created, publish it and the [Promote AWX Operator image](https://github.com/ansible/awx-operator/blob/devel/.github/workflows/promote.yaml) will run, which will:
-
-- Publish image to Quay
-- Release Helm chart
-
-## Author
-
-This operator was originally built in 2019 by [Jeff Geerling](https://www.jeffgeerling.com) and is now maintained by the Ansible Team
-
-## Code of Conduct
-
-We ask all of our community members and contributors to adhere to the [Ansible code of conduct](http://docs.ansible.com/ansible/latest/community/code_of_conduct.html). If you have questions or need assistance, please reach out to our community team at [codeofconduct@ansible.com](mailto:codeofconduct@ansible.com)
-
-## Get Involved
-
-We welcome your feedback and ideas. The AWX operator uses the same mailing list and IRC channel as AWX itself. Here's how to reach us with feedback and questions:
-
-- Join the [Ansible AWX channel on Matrix](https://matrix.to/#/#awx:ansible.com)
-- Join the [Ansible Community Forum](https://forum.ansible.com)
+Originally built in 2019 by [Jeff Geerling](https://www.jeffgeerling.com) as the AWX Operator, and maintained for Ascender by Ctrl IQ.
