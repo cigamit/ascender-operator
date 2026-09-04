@@ -1,7 +1,0 @@
----
-collections:
-  - name: community.general
-  - name: kubernetes.core
-  - name: operator_sdk.util
-  - name: community.docker
-  - name: awx.awx

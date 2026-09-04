@@ -1,8 +1,0 @@
----
-- name: Run creation tasks
-  include_tasks: creation.yml
-  when: not finalizer_run
-
-- name: Run finalizer tasks
-  include_tasks: finalizer.yml
-  when: finalizer_run
