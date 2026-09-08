@@ -32,3 +32,27 @@ To uninstall the chart:
 ```bash
 helm delete my-ascender-operator
 ```
+
+Example `my-values.yml` (tested in K3S)
+
+```
+AWX:
+  enabled: true
+  name: ascender
+  spec:
+    ingress_type: ingress
+    ingress_class_name: traefik
+    hostname: ascender.example.com
+    extra_settings:
+      - setting: CSRF_TRUSTED_ORIGINS
+        value:
+          - https://ascender.example.com
+          - http://ascender.example.com
+
+    secret_key_secret: ascender-secret-key
+
+    projects_persistence: true
+    projects_storage_class: local-path
+    projects_storage_size: 8Gi
+    projects_storage_access_mode: ReadWriteOnce
+```
