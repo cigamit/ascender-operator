@@ -24,7 +24,7 @@ helm install my-ascender-operator ascender-operator/ascender-operator
 To install a specific ascender-operator helm chart version in a specific namespace:
 
 ```
-helm install my-ascender-operator ascender-operator/ascender-operator -n ascender --create-namespace -f my-values.yml --version 1.3.0
+helm install my-ascender-operator ascender-operator/ascender-operator -n ascender --create-namespace -f my-values.yml --version 25.6.1
 ```
 
 To uninstall the chart:
