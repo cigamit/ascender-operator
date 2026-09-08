@@ -3,12 +3,12 @@ entries:
   ascender-operator:
   - apiVersion: v2
     appVersion: 25.6.1
-    created: "2026-09-08T14:58:31.360180498Z"
+    created: "2026-09-08T16:13:09.122547714Z"
     description: A Helm chart for the Ascender Operator
-    digest: 65ec8ab76e39d2ac82643ffb31c717c130d1ad78d86fa826bfa4385c74bd7f96
+    digest: f0d1ced080d6e9ae0a2caccf1a7ceb3b860a26cc81e1d75541c951b70b79d942
     name: ascender-operator
     type: application
     urls:
     - https://github.com/ctrliq/ascender-operator/releases/download/25.6.1/ascender-operator-25.6.1.tgz
     version: 25.6.1
-generated: "2026-09-08T14:58:31.345065827Z"
+generated: "2026-09-08T16:13:09.121037354Z"
