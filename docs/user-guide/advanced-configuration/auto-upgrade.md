@@ -1,13 +1,13 @@
 #### Auto upgrade
 With this parameter you can influence the behavior during an operator upgrade.  
 If set to `true`, the operator will upgrade the specific instance directly.  
-When the value is set to `false`, and we have a running deployment, the operator will not update the AWX instance.  
-This can be useful when you have multiple AWX instances which you want to upgrade step by step instead of all at once.  
+When the value is set to `false`, and we have a running deployment, the operator will not update the Ascender instance.  
+This can be useful when you have multiple Ascender instances which you want to upgrade step by step instead of all at once.  
 
 
 | Name         | Description                        | Default |
 | -------------| ---------------------------------- | ------- |
-| auto_upgrade | Automatic upgrade of AWX instances | true    |
+| auto_upgrade | Automatic upgrade of Ascender instances | true    |
 
 Example configuration of `auto_upgrade` parameter
 
@@ -28,7 +28,7 @@ Changing flags:
 
 Delete the deployment:
 
-- delete the deployment object of your AWX instance  
+- delete the deployment object of your Ascender instance  
 ```
 $ kubectl -n awx delete deployment <yourInstanceName> 
 ```

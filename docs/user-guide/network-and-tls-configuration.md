@@ -2,7 +2,7 @@
 
 #### Service Type
 
-If the `service_type` is not specified, the `ClusterIP` service will be used for your AWX Tower service.
+If the `service_type` is not specified, the `ClusterIP` service will be used for your Ascender service.
 
 The `service_type` supported options are: `ClusterIP`, `LoadBalancer` and `NodePort`.
 
@@ -52,7 +52,7 @@ spec:
 
 When setting up a Load Balancer for HTTPS you will be required to set the `loadbalancer_port` to move the port away from `80`.
 
-The HTTPS Load Balancer also uses SSL termination at the Load Balancer level and will offload traffic to AWX over HTTP.
+The HTTPS Load Balancer also uses SSL termination at the Load Balancer level and will offload traffic to Ascender over HTTP.
 
   * NodePort
 
@@ -71,7 +71,7 @@ spec:
 ```
 #### Ingress Type
 
-By default, the AWX operator is not opinionated and won't force a specific ingress type on you. So, when the `ingress_type` is not specified, it will default to `none` and nothing ingress-wise will be created.
+By default, the Ascender Operator is not opinionated and won't force a specific ingress type on you. So, when the `ingress_type` is not specified, it will default to `none` and nothing ingress-wise will be created.
 
 The `ingress_type` supported options are: `none`, `ingress` and `route`. To toggle between these options, you can add the following to your AWX CRD:
 
@@ -114,7 +114,7 @@ spec:
 
 ##### Specialized Ingress Controller configuration
 
-Some Ingress Controllers need a special configuration to fully support AWX, add the following value with the `ingress_controller` variable, if you are using one of these:
+Some Ingress Controllers need a special configuration to fully support Ascender, add the following value with the `ingress_controller` variable, if you are using one of these:
 
 | Ingress Controller name               | value   |
 | ------------------------------------- | ------- |

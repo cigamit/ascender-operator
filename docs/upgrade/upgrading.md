@@ -1,13 +1,13 @@
 ### Upgrading
 
-To upgrade AWX, it is recommended to upgrade the awx-operator to the version that maps to the desired version of AWX. To find the version of AWX that will be installed by the awx-operator by default, check the version specified in the `DEFAULT_AWX_VERSION` variable for that particular release. You can do so by running the following command
+To upgrade Ascender, it is recommended to upgrade the awx-operator to the version that maps to the desired version of Ascender. To find the version of Ascender that will be installed by the awx-operator by default, check the version specified in the `DEFAULT_AWX_VERSION` variable for that particular release. You can do so by running the following command
 
 ```shell
 AWX_OPERATOR_VERSION=2.8.0
 docker run --entrypoint="" quay.io/ansible/awx-operator:$AWX_OPERATOR_VERSION bash -c "env | grep DEFAULT_AWX_VERSION"
 ```
 
-Apply the awx-operator.yml for that release to upgrade the operator, and in turn also upgrade your AWX deployment.
+Apply the awx-operator.yml for that release to upgrade the operator, and in turn also upgrade your Ascender deployment.
 
 #### Backup
 
@@ -34,7 +34,7 @@ spec:
 
 ##### Cluster-scope to Namespace-scope considerations
 
-Starting with awx-operator 0.14.0, AWX can only be deployed in the namespace that the operator exists in. This is called a namespace-scoped operator. If you are upgrading from an earlier version, you will want to
+Starting with awx-operator 0.14.0, Ascender can only be deployed in the namespace that the operator exists in. This is called a namespace-scoped operator. If you are upgrading from an earlier version, you will want to
 delete your existing `awx-operator` service account, role and role binding.
 
 ##### Project is now based on v1.x of the operator-sdk project
@@ -43,7 +43,7 @@ Starting with awx-operator 0.14.0, the project is now based on operator-sdk 1.x.
 
 ##### Steps to upgrade
 
-Delete your old AWX Operator and existing `awx-operator` service account, role and role binding in `default` namespace first:
+Delete your old Ascender Operator and existing `awx-operator` service account, role and role binding in `default` namespace first:
 
 ```
 $ kubectl -n default delete deployment awx-operator
@@ -52,6 +52,6 @@ $ kubectl -n default delete clusterrolebinding awx-operator
 $ kubectl -n default delete clusterrole awx-operator
 ```
 
-Then install the new AWX Operator by following the instructions in [Basic Install](#basic-install-on-existing-cluster). The `NAMESPACE` environment variable have to be the name of the namespace in which your old AWX instance resides.
+Then install the new Ascender Operator by following the instructions in [Basic Install](#basic-install-on-existing-cluster). The `NAMESPACE` environment variable have to be the name of the namespace in which your old Ascender instance resides.
 
-Once the new AWX Operator is up and running, your AWX deployment will also be upgraded.
+Once the new Ascender Operator is up and running, your Ascender deployment will also be upgraded.

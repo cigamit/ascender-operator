@@ -1,8 +1,8 @@
-# Debugging the AWX Operator
+# Debugging the Ascender Operator
 
 ## General Debugging
 
-When the operator is deploying AWX, it is running the `installer` role inside the operator container. If the AWX CR's status is `Failed`, it is often useful to look at the awx-operator container logs, which shows the output of the installer role. To see these logs, run:
+When the operator is deploying Ascender, it is running the `installer` role inside the operator container. If the AWX CR's status is `Failed`, it is often useful to look at the awx-operator container logs, which shows the output of the installer role. To see these logs, run:
 
 ```
 kubectl logs deployments/awx-operator-controller-manager -c awx-manager -f
@@ -10,7 +10,7 @@ kubectl logs deployments/awx-operator-controller-manager -c awx-manager -f
 
 ### Inspect k8s Resources
 
-Past that, it is often useful to inspect various resources the AWX Operator manages like:
+Past that, it is often useful to inspect various resources the Ascender Operator manages like:
 * awx
 * awxbackup
 * awxrestore

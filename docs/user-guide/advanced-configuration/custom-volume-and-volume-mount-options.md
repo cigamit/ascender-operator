@@ -97,7 +97,7 @@ Using the [extra_volumes feature](#custom-volume-and-volume-mount-options), it i
 2. Create an extra_volumes entry in the AWX spec for this ConfigMap
 3. Create an web_extra_volume_mounts entry in the AWX spec to mount this volume
 
-The AWX nginx config automatically includes /etc/nginx/conf.d/*.conf if present.
+The Ascender nginx config automatically includes /etc/nginx/conf.d/*.conf if present.
 
 Additionally there are some global configuration values in the base nginx
 config that are available for setting with individual variables.
@@ -118,7 +118,7 @@ configuration.
 
 ## Custom Logos
 
-You can use custom volume mounts to mount in your own logos to be displayed instead of the AWX logo.
+You can use custom volume mounts to mount in your own logos to be displayed instead of the Ascender logo.
 There are two different logos, one to be displayed on page headers, and one for the login screen.
 
 First, create configmaps for the logos from local `logo-login.svg` and `logo-header.svg` files.
@@ -160,7 +160,7 @@ spec:
 
 ## Custom Favicon
 
-You can also use custom volume mounts to mount in your own favicon to be displayed in your AWX browser tab.
+You can also use custom volume mounts to mount in your own favicon to be displayed in your Ascender browser tab.
 
 First, create the configmap from a local `favicon.ico` file.
 
@@ -188,6 +188,6 @@ spec:
       subPath: favicon.ico
 ```
 
-## Custom AWX Configuration
+## Custom Ascender Configuration
 
-Refer to the [Extra Settings](./extra-settings.md) documentation for customizing the AWX configuration.
+Refer to the [Extra Settings](./extra-settings.md) documentation for customizing the Ascender configuration.

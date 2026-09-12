@@ -2,14 +2,14 @@
 
 During deployment restarts or new rollouts, when old ReplicaSet Pods are being
 terminated, the corresponding jobs which are managed (executed or controlled)
-by old AWX Pods may end up in `Error` state as there is no mechanism to
-transfer them to the newly spawned AWX Pods. To work around the problem one
+by old Ascender Pods may end up in `Error` state as there is no mechanism to
+transfer them to the newly spawned Ascender Pods. To work around the problem one
 could set `termination_grace_period_seconds` in AWX spec, which does the
 following:
 
 * It sets the corresponding
   [`terminationGracePeriodSeconds`](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination)
-  Pod spec of the AWX Deployment to the value provided
+  Pod spec of the Ascender Deployment to the value provided
 
   > The grace period is the duration in seconds after the processes running in
   > the pod are sent a termination signal and the time when the processes are
@@ -17,15 +17,15 @@ following:
 
 * It adds a
   [`PreStop`](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution)
-  hook script, which will keep AWX Pods in terminating state until it finished,
+  hook script, which will keep Ascender Pods in terminating state until it finished,
   up to `terminationGracePeriodSeconds`.
 
   > This grace period applies to the total time it takes for both the PreStop
   > hook to execute and for the Container to stop normally
 
-  While the hook script just waits until the corresponding AWX Pod (instance)
+  While the hook script just waits until the corresponding Ascender Pod (instance)
   no longer has any managed jobs, in which case it finishes with success and
-  hands over the overall Pod termination process to normal AWX processes.
+  hands over the overall Pod termination process to normal Ascender processes.
 
 One may want to set this value to the maximum duration they accept to wait for
 the affected Jobs to finish. Keeping in mind that such finishing jobs may
@@ -35,10 +35,10 @@ evictions](https://kubernetes.io/docs/concepts/scheduling-eviction/api-eviction/
 
 #### Upgrades
 
-`termination_grace_period_seconds` does not cover an upgrade to a new AWX
+`termination_grace_period_seconds` does not cover an upgrade to a new Ascender
 version on its own. Once the first Pod running the new version registers itself
 as an instance, every control node still running the old version stops its own
-services, because AWX shuts a node down when it sees a peer reporting a higher
+services, because Ascender shuts a node down when it sees a peer reporting a higher
 version. That happens from inside the container, so it preempts the `PreStop`
 hook, and the jobs the hook was waiting for fail with `Task was canceled due to
 receiving a shutdown signal.`

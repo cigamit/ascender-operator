@@ -2,7 +2,7 @@
 
 In cases which you need to trust a custom Certificate Authority, there are few variables you can customize for the `awx-operator`.
 
-Trusting a custom Certificate Authority allows the AWX to access network services configured with SSL certificates issued locally, such as cloning a project from from an internal Git server via HTTPS. It is common for these scenarios, experiencing the error [unable to verify the first certificate](https://github.com/ansible/awx-operator/issues/376).
+Trusting a custom Certificate Authority allows Ascender to access network services configured with SSL certificates issued locally, such as cloning a project from from an internal Git server via HTTPS. It is common for these scenarios, experiencing the error [unable to verify the first certificate](https://github.com/ansible/awx-operator/issues/376).
 
 
 | Name                             | Description                              | Default |

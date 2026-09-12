@@ -2,13 +2,13 @@
 
 #### PostgreSQL Version
 
-The default PostgreSQL version for the version of AWX bundled with the latest version of the awx-operator is PostgreSQL 15. You can find this default for a given version by at the default value for [supported_pg_version](https://github.com/ansible/awx-operator/blob/ffba1b4712a0b03f1faedfa70e3a9ef0d443e4a6/roles/installer/vars/main.yml#L7).
+The default PostgreSQL version for the version of Ascender bundled with the latest version of the awx-operator is PostgreSQL 15. You can find this default for a given version by at the default value for [supported_pg_version](https://github.com/ansible/awx-operator/blob/ffba1b4712a0b03f1faedfa70e3a9ef0d443e4a6/roles/installer/vars/main.yml#L7).
 
 We only have coverage for the default version of PostgreSQL. Newer versions of PostgreSQL will likely work, but should only be configured as an external database. If your database is managed by the awx-operator (default if you don't specify a `postgres_configuration_secret`), then you should not override the default version as this may cause issues when awx-operator tries to upgrade your postgresql pod.
 
 #### External PostgreSQL Service
 
-To configure AWX to use an external database, the Custom Resource needs to know about the connection details. To do this, create a k8s secret with those connection details and specify the name of the secret as `postgres_configuration_secret` at the CR spec level.
+To configure Ascender to use an external database, the Custom Resource needs to know about the connection details. To do this, create a k8s secret with those connection details and specify the name of the secret as `postgres_configuration_secret` at the CR spec level.
 
 
 The secret should be formatted as follows:
@@ -38,7 +38,7 @@ type: Opaque
 
 **Note**: The variable `sslmode` is valid for `external` databases only. The allowed values are: `prefer`, `disable`, `allow`, `require`, `verify-ca`, `verify-full`.
 
-**Note**: The variable `target_session_attrs` is only useful for `clustered external` databases. The allowed values are: `any` (default), `read-write`, `read-only`, `primary`, `standby` and `prefer-standby`, whereby only `read-write` and `primary` really make sense in AWX use, as you want to connect to a database node that offers write support.
+**Note**: The variable `target_session_attrs` is only useful for `clustered external` databases. The allowed values are: `any` (default), `read-write`, `read-only`, `primary`, `standby` and `prefer-standby`, whereby only `read-write` and `primary` really make sense in Ascender use, as you want to connect to a database node that offers write support.
 
 Once the secret is created, you can specify it on your spec:
 
@@ -55,7 +55,7 @@ For instructions on how to migrate from an older version of AWX, see [migration.
 
 #### Managed PostgreSQL Service
 
-If you don't have access to an external PostgreSQL service, the AWX operator can deploy one for you along side the AWX instance itself.
+If you don't have access to an external PostgreSQL service, the Ascender Operator can deploy one for you along side the Ascender instance itself.
 
 The following variables are customizable for the managed PostgreSQL service
 
@@ -98,7 +98,7 @@ spec:
 ## PostgreSQL Extra Settings
 
 !!! warning "Deprecation Notice"
-    The `postgres_extra_args` parameter is **deprecated** and should no longer be used. Use `postgres_extra_settings` instead for configuring PostgreSQL parameters. The `postgres_extra_args` parameter will be removed in a future version of the AWX operator.
+    The `postgres_extra_args` parameter is **deprecated** and should no longer be used. Use `postgres_extra_settings` instead for configuring PostgreSQL parameters. The `postgres_extra_args` parameter will be removed in a future version of the Ascender Operator.
 
 You can customize PostgreSQL configuration by adding settings to the `postgresql.conf` file using the `postgres_extra_settings` parameter. This allows you to tune PostgreSQL performance, security, and behavior according to your specific requirements.
 

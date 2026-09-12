@@ -1,6 +1,6 @@
 # Mesh Ingress
 
-The mesh ingress allows users to peer external execution and hop nodes into the AWX control plane.
+The mesh ingress allows users to peer external execution and hop nodes into the Ascender control plane.
 This guide focuses on how to enable and configure the mesh ingress.
 For more information about remote execution and hop nodes and how to create them, refer to the [Managing Capacity With Instances](https://ansible.readthedocs.io/projects/awx/en/latest/administration/instances.html) chapter of the AWX Administration Guide.
 
@@ -12,13 +12,13 @@ For more information about remote execution and hop nodes and how to create them
 ## Deploy and configure AWXMeshIngress
 
 !!! note
-    The mesh ingress uses the `control_plane_ee_image` and `image_pull_policy` fields of the AWX instance to determine image and policy to be adopted.
+    The mesh ingress uses the `control_plane_ee_image` and `image_pull_policy` fields of the Ascender instance to determine image and policy to be adopted.
     Defaulted to `quay.io/ansible/awx-ee:latest` and `Always`.
     Currently there are no dedicated parameters to specify the image and policy.
 
 ### On Red Hat OpenShift with Operator managed Route
 
-To deploy a mesh ingress on OpenShift, create the AWXMeshIngress resource on the namespace where your AWX instance is running on.
+To deploy a mesh ingress on OpenShift, create the AWXMeshIngress resource on the namespace where your Ascender instance is running on.
 
 Example:
 
@@ -34,11 +34,11 @@ spec:
 
 ### On Kubernetes with Operator managed Ingress (NGINX)
 
-To deploy a mesh ingress on Kubernetes cluster which has [NGINX Ingress Controller](https://www.nginx.com/products/nginx-ingress-controller/), create the AWXMeshIngress resource on the namespace where your AWX instance is running on.
+To deploy a mesh ingress on Kubernetes cluster which has [NGINX Ingress Controller](https://www.nginx.com/products/nginx-ingress-controller/), create the AWXMeshIngress resource on the namespace where your Ascender instance is running on.
 
 Note that AWXMeshIngress requires [SSL Passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough) enabled which is disabled by default. Ensure it is enabled on your NGINX Ingress Controller.
 
-By specifying `ingress_controller` as `nginx`, AWX Operator will generate Ingress resource that has `nginx.ingress.kubernetes.io/ssl-passthrough` annotation set to `"true"`.
+By specifying `ingress_controller` as `nginx`, Ascender Operator will generate Ingress resource that has `nginx.ingress.kubernetes.io/ssl-passthrough` annotation set to `"true"`.
 
 Example:
 
@@ -60,9 +60,9 @@ spec:
 
 ### On Kubernetes with Operator managed Ingress (Traefik)
 
-To deploy a mesh ingress on Kubernetes cluster which has [Traefik Kubernetes Ingress provider](https://doc.traefik.io/traefik/providers/kubernetes-ingress/), create the AWXMeshIngress resource on the namespace where your AWX instance is running on.
+To deploy a mesh ingress on Kubernetes cluster which has [Traefik Kubernetes Ingress provider](https://doc.traefik.io/traefik/providers/kubernetes-ingress/), create the AWXMeshIngress resource on the namespace where your Ascender instance is running on.
 
-Note that by deploying following AWXMeshIngress, AWX Operator will generate IngressRouteTCP resource that has `websecure` as an `entryPoints`. If this does not satisfy your requirement, refer to [User managed Ingress section](#on-kubernetes-with-user-managed-ingress) and  create an IngressRouteTCP resource manually.
+Note that by deploying following AWXMeshIngress, Ascender Operator will generate IngressRouteTCP resource that has `websecure` as an `entryPoints`. If this does not satisfy your requirement, refer to [User managed Ingress section](#on-kubernetes-with-user-managed-ingress) and  create an IngressRouteTCP resource manually.
 
 Example:
 
@@ -84,13 +84,13 @@ spec:
 ```
 
 !!! tip
-    AWX Operator supports both API groups `traefik.io` and `traefik.containo.us` in `ingress_api_version` for Traefik, but it is recommended to use `traefik.io` since `traefik.containo.us` is deprecated in Traefik v2.10 and is removed in Traefik v3. Refer to [Traefik documentation](https://doc.traefik.io/traefik/migration/v2/#v210) for more information about deprecation.
+    Ascender Operator supports both API groups `traefik.io` and `traefik.containo.us` in `ingress_api_version` for Traefik, but it is recommended to use `traefik.io` since `traefik.containo.us` is deprecated in Traefik v2.10 and is removed in Traefik v3. Refer to [Traefik documentation](https://doc.traefik.io/traefik/migration/v2/#v210) for more information about deprecation.
 
     If you can't see any IngressRouteTCP resources by `kubectl` command after deploying mesh ingress, you should fully qualify the resource name with API group, `kubectl get ingressroutetcp.traefik.io` or `kubectl get ingressroutetcp.traefik.containo.us` for example.
 
 ### On Kubernetes with User managed Ingress
 
-To deploy a mesh ingress on Kubernetes cluster, create the AWXMeshIngress resource on the namespace where your AWX instance is running on.
+To deploy a mesh ingress on Kubernetes cluster, create the AWXMeshIngress resource on the namespace where your Ascender instance is running on.
 
 Alternatively, if you wish to create your own Ingress resource, you can deploy a mesh ingress with `ingress_type` set to `none` and then manually create an Ingress resource with any configuration.
 
@@ -166,9 +166,9 @@ spec:
 
 ## Validating setup of Mesh Ingress
 
-After AWXMeshIngress has been successfully created, a new Instance with the same name will be registered to AWX and will be visible on the Instance UI page
+After AWXMeshIngress has been successfully created, a new Instance with the same name will be registered to Ascender and will be visible on the Instance UI page
 
-![mesh ingress instance on AWX UI](mesh-ingress-instance-on-awx-ui.png)
+![mesh ingress instance on Ascender UI](mesh-ingress-instance-on-awx-ui.png)
 
 The Instance should have at least 2 listener addresses.
 
@@ -182,13 +182,13 @@ In this example, the mesh ingress has two listener addresses:
 When selecting peer for new instance the mesh ingress instance should now be present as a option.
 ![peering to mesh ingress on awx ui](peering-to-mesh-ingress-on-awx-ui.png)
 
-For more information about how to create external remote execution and hop nodes and configuring the mesh, see AWX Documentation on [Add a instance](https://ansible.readthedocs.io/projects/awx/en/latest/administration/instances.html#add-an-instance).
+For more information about how to create external remote execution and hop nodes and configuring the mesh, see the AWX documentation on [Add a instance](https://ansible.readthedocs.io/projects/awx/en/latest/administration/instances.html#add-an-instance).
 
 ## Custom Resource Definitions
 
 ### AWXMeshIngress
 
-AWXMeshIngress controls the deployment and configuration of mesh ingress on AWX
+AWXMeshIngress controls the deployment and configuration of mesh ingress on Ascender
 
 | Name                                                                                                                          | Description                                                                                                                                                         |
 | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -204,7 +204,7 @@ AWXMeshIngressSpec is the description of the configuration for AWXMeshIngress.
 
 | Name                                     | Description                                                                                                                                                                                                                                 | Default                                        |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| **`deployment_name`** (string), required | Name of the AWX deployment to create the Mesh Ingress for.                                                                                                                                                                                  | `awx`                                          |
+| **`deployment_name`** (string), required | Name of the Ascender deployment to create the Mesh Ingress for.                                                                                                                                                                                  | `awx`                                          |
 | **`ingress_type`** (string)              | Ingress type for ingress managed by the operator. Options: `none`, `Ingress`, `IngressRouteTCP`, `Route`                                                                                                                                    | `Route` (on OpenShift), `none` (on Kubernetes) |
 | **`external_hostname`** (string)         | External hostname is an optional field used for specifying the external hostname defined in an [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). This parameter is automatically generated on OpenShift          | N/A                                            |
 | **`external_ipaddress`** (string)        | External IP Address is an optional field used for specifying the external IP address defined in an [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)                                                              | N/A                                            |

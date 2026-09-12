@@ -1,4 +1,4 @@
-# AWX Operator on Kind
+# Ascender Operator on Kind
 
 ## Kind Install
 
@@ -52,7 +52,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main
 ```
 
 
-## AWX
+## Ascender
 
 Set the namespace context
 
@@ -110,7 +110,7 @@ Create your AWX CR
 kubectl create -f awx-cr.yaml
 ```
 
-Your AWX instance should now be reacheable at http://localhost:32000/
+Your Ascender instance should now be reacheable at http://localhost:32000/
 
 > If you configured a custom nodeport_port, you can find it by running `kubectl -n awx get svc awx-demo-service`
 

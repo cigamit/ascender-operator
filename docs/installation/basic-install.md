@@ -20,7 +20,7 @@ export VERSION=<tag>
 export VERSION=2.7.2
 ```
 
-Once you have a running Kubernetes cluster, you can deploy AWX Operator into your cluster using [Kustomize](https://kubectl.docs.kubernetes.io/guides/introduction/kustomize/). Since kubectl version 1.14 kustomize functionality is built-in (otherwise, follow the instructions here to install the latest version of Kustomize: https://kubectl.docs.kubernetes.io/installation/kustomize/ )
+Once you have a running Kubernetes cluster, you can deploy Ascender Operator into your cluster using [Kustomize](https://kubectl.docs.kubernetes.io/guides/introduction/kustomize/). Since kubectl version 1.14 kustomize functionality is built-in (otherwise, follow the instructions here to install the latest version of Kustomize: https://kubectl.docs.kubernetes.io/installation/kustomize/ )
 
 > Some things may need to be configured slightly differently for different Kubernetes flavors for the networking aspects. When installing on Kind, see the [kind install docs](./kind-install.md) for more details.
 
@@ -89,9 +89,9 @@ So we don't have to keep repeating `-n awx`, let's set the current namespace for
 $ kubectl config set-context --current --namespace=awx
 ```
 
-Next, create a file named `awx-demo.yml` in the same folder with the suggested content below. The `metadata.name` you provide will be the name of the resulting AWX deployment.
+Next, create a file named `awx-demo.yml` in the same folder with the suggested content below. The `metadata.name` you provide will be the name of the resulting Ascender deployment.
 
-**Note:** If you deploy more than one AWX instance to the same namespace, be sure to use unique names.
+**Note:** If you deploy more than one Ascender instance to the same namespace, be sure to use unique names.
 
 ```yaml
 ---
@@ -130,13 +130,13 @@ resources:
 ...
 ```
 
-Finally, apply the changes to create the AWX instance in your cluster:
+Finally, apply the changes to create the Ascender instance in your cluster:
 
 ```
 kubectl apply -k .
 ```
 
-After a few minutes, the new AWX instance will be deployed. You can look at the operator pod logs in order to know where the installation process is at:
+After a few minutes, the new Ascender instance will be deployed. You can look at the operator pod logs in order to know where the installation process is at:
 
 ```
 $ kubectl logs -f deployments/awx-operator-controller-manager -c awx-manager
@@ -156,7 +156,7 @@ awx-demo-postgres   ClusterIP   None           <none>        5432/TCP       4m4s
 awx-demo-service    NodePort    10.109.40.38   <none>        80:31006/TCP   3m56s
 ```
 
-Once deployed, the AWX instance will be accessible by running:
+Once deployed, the Ascender instance will be accessible by running:
 
 ```
 $ minikube service -n awx awx-demo-service --url
@@ -169,6 +169,6 @@ $ kubectl get secret awx-demo-admin-password -o jsonpath="{.data.password}" | ba
 yDL2Cx5Za94g9MvBP6B73nzVLlmfgPjR
 ```
 
-You just completed the most basic install of an AWX instance via this operator. Congratulations!!!
+You just completed the most basic install of an Ascender instance via this operator. Congratulations!!!
 
 For an example using the Nginx Ingress Controller in Minikube, don't miss our [demo video](https://asciinema.org/a/416946).

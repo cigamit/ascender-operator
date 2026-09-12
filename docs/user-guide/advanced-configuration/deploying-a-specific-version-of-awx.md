@@ -1,4 +1,4 @@
-#### Deploying a specific version of AWX
+#### Deploying a specific version of Ascender
 
 There are a few variables that are customizable for awx the image management.
 
