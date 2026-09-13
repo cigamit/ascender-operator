@@ -1,0 +1,84 @@
+---
+# The documentation in docs/ is built with mkdocs and published to the gh-pages
+# branch, which GitHub Pages serves at https://ctrliq.github.io/ascender-operator/.
+#
+# That branch also carries index.yaml, the Helm chart repository index written by
+# publish-helm.yaml. This workflow writes the site around that file and never
+# touches it, and the chart workflow only ever stages index.yaml, so the two share
+# the branch without treading on each other. index.yaml stays a file at the root,
+# which is where helm repo add looks for it.
+name: Publish the Ascender Operator documentation
+on:
+  push:
+    branches: [devel]
+    paths:
+      - docs/**
+      - mkdocs.yml
+      - .github/workflows/publish-docs.yaml
+  workflow_dispatch:
+
+# gh-pages takes one writer at a time, and publish-helm.yaml is the other one.
+concurrency:
+  group: gh-pages
+  cancel-in-progress: false
+
+jobs:
+  publish-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          # docs/requirements.txt was compiled against this interpreter
+          python-version: '3.12'
+
+      - name: Build the site
+        run: |
+          python -m pip install --requirement docs/requirements.txt
+          mkdocs build --strict --site-dir site
+
+      - name: Publish the site to the gh-pages branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone --branch gh-pages --single-branch "${REPO_URL}" gh-pages
+
+          cd gh-pages
+
+          # Drop the site published last time, so pages that were renamed or deleted
+          # go with it, while keeping the chart index and the files that belong to
+          # the branch rather than to a build.
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name .git \
+            ! -name index.yaml \
+            ! -name README.md \
+            ! -name .gitignore \
+            -exec rm -rf {} +
+
+          cp -a ../site/. .
+
+          # Without this, Pages runs the built site through Jekyll.
+          touch .nojekyll
+
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git add -A
+
+          # git commit exits non-zero when nothing is staged, so only commit when the
+          # build actually changed something
+          if git diff --cached --quiet; then
+            echo "The published site already matches this build; nothing to publish."
+            exit 0
+          fi
+
+          git commit -m "Publish the documentation built from ${GITHUB_SHA}"
+
+          # publish-helm.yaml pushes to this branch too, so lose a race gracefully
+          git push origin gh-pages || {
+            git pull --rebase origin gh-pages
+            git push origin gh-pages
+          }
