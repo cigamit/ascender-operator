@@ -3,7 +3,7 @@
 # Upgrade Posgres (Managed Databases only)
 #  * If postgres version is not supported_pg_version, and not an external postgres instance (when managed_database is yes),
 #    then run this playbook with include_tasks from database_configuration.yml
-#  * Data will be streamed via a pg_dump from the postgres 12/13 pod to the postgres supported_pg_version
+#  * Data will be streamed via a pg_dump from the old postgres (12/13/15) pod to the postgres supported_pg_version
 #    pod via a pg_restore.
 
 
@@ -142,6 +142,7 @@
   loop:
     - "{{ ansible_operator_meta.name }}-postgres"
     - "{{ ansible_operator_meta.name }}-postgres-13"
+    - "{{ ansible_operator_meta.name }}-postgres-15"
 
 - name: Remove old PostgreSQL Service
   k8s:
@@ -153,3 +154,4 @@
   loop:
     - "{{ ansible_operator_meta.name }}-postgres"
     - "{{ ansible_operator_meta.name }}-postgres-13"
+    - "{{ ansible_operator_meta.name }}-postgres-15"

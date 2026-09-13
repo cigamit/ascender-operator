@@ -2,7 +2,7 @@
 
 #### PostgreSQL Version
 
-The default PostgreSQL version for the version of AWX bundled with the latest version of the awx-operator is PostgreSQL 15. You can find this default for a given version by at the default value for [supported_pg_version](https://github.com/ansible/awx-operator/blob/ffba1b4712a0b03f1faedfa70e3a9ef0d443e4a6/roles/installer/vars/main.yml#L7).
+The default PostgreSQL version for the managed database deployed by the latest version of the awx-operator is PostgreSQL 18, using the `quay.io/sclorg/postgresql-18-c9s` image. You can find this default for a given version at the default value for [supported_pg_version](https://github.com/ctrliq/ascender-operator/blob/devel/roles/installer/vars/main.yml).
 
 We only have coverage for the default version of PostgreSQL. Newer versions of PostgreSQL will likely work, but should only be configured as an external database. If your database is managed by the awx-operator (default if you don't specify a `postgres_configuration_secret`), then you should not override the default version as this may cause issues when awx-operator tries to upgrade your postgresql pod.
 
@@ -61,7 +61,7 @@ The following variables are customizable for the managed PostgreSQL service
 
 | Name                                          | Description                                                     | Default                                 |
 | --------------------------------------------- | --------------------------------------------------------------- | --------------------------------------- |
-| postgres_image                                | Path of the image to pull                                       | quay.io/sclorg/postgresql-15-c9s        |
+| postgres_image                                | Path of the image to pull                                       | quay.io/sclorg/postgresql-18-c9s        |
 | postgres_image_version                        | Image version to pull                                           | latest                                  |
 | postgres_resource_requirements                | PostgreSQL container (and initContainer) resource requirements  | requests: {cpu: 10m, memory: 64Mi}      |
 | postgres_storage_requirements                 | PostgreSQL container storage requirements                       | requests: {storage: 8Gi}                |
@@ -132,6 +132,32 @@ spec:
 | `checkpoint_completion_target` | Target for checkpoint completion | `"0.9"` |
 | `wal_buffers` | Amount of memory for WAL buffers | `"16MB"` |
 
+### Settings introduced in PostgreSQL 16, 17 and 18
+
+The managed database runs PostgreSQL 18. The settings below were added or changed in PostgreSQL 16 through 18 and are the ones most relevant to AWX workloads (large `IN (...)` lists from the ORM, high-volume job event inserts, and tables that churn in place). All of them are configured through `postgres_extra_settings`; the operator does not set any of them by default.
+
+| Setting | Added in | Description | Example Value |
+|---------|----------|-------------|---------------|
+| `io_method` | 18 | Asynchronous I/O implementation: `worker` (default) or `sync`. Do not set `io_uring`, see the warning below. | `"worker"` |
+| `io_workers` | 18 | Number of I/O worker processes when `io_method` is `worker` (default 3). Raise on larger database nodes. | `"6"` |
+| `effective_io_concurrency` | older, default raised in 18 | Concurrent storage I/O operations a session may issue (default now 16). Increase on fast SSD or NVMe backed volumes. | `"32"` |
+| `maintenance_io_concurrency` | older, default raised in 18 | Same as above for maintenance work such as `VACUUM` (default now 16). | `"32"` |
+| `transaction_timeout` | 17 | Terminates any session whose transaction runs longer than this, closing the gap left by `statement_timeout` and `idle_in_transaction_session_timeout`. Set it well above your longest migration or backup. | `"1h"` |
+| `vacuum_buffer_usage_limit` | 16 | Size of the buffer ring used by `VACUUM` and `ANALYZE` (default 2MB). Larger values speed up vacuum of big tables. | `"64MB"` |
+| `autovacuum_worker_slots` | 18 | Upper bound for `autovacuum_max_workers`, which can now be raised at runtime without a restart. | `"16"` |
+| `autovacuum_vacuum_max_threshold` | 18 | Caps the number of dead tuples needed to trigger autovacuum on very large tables (default 100,000,000). | `"10000000"` |
+| `scram_iterations` | 16 | Iteration count for SCRAM-SHA-256 password hashing (default 4096). | `"8192"` |
+| `reserved_connections` | 16 | Connection slots reserved for roles granted `pg_use_reserved_connections`, in addition to the superuser reservation. | `"3"` |
+| `summarize_wal` | 17 | Enables WAL summarization, required for incremental `pg_basebackup`. | `"on"` |
+| `track_io_timing` | older | Collects I/O timing for the per-backend-type `pg_stat_io` view added in 16. | `"on"` |
+| `track_cost_delay_timing` | 18 | Records time spent in vacuum cost delays, visible in `pg_stat_progress_vacuum`. | `"on"` |
+
+!!! warning "Do not set `io_method` to `io_uring`"
+    PostgreSQL 18 refuses to start when `io_method = io_uring` and io_uring is unavailable; there is no fallback to another method. io_uring is commonly unavailable on Kubernetes nodes: RHEL and Rocky Linux 9 kernels disable it kernel-wide, and the default container runtime seccomp profiles block the io_uring syscalls (the operator applies the runtime default seccomp profile when `restricted_security_context` is enabled). Keep the default `io_method = worker`, which captures most of the asynchronous I/O benefit.
+
+!!! note
+    `io_method`, `autovacuum_worker_slots`, `reserved_connections` and `scram_iterations` can only change at server start. The operator restarts the PostgreSQL pod whenever `postgres_extra_settings` changes, so this happens automatically.
+
 ### Important Notes
 
 !!! warning
@@ -162,11 +188,13 @@ SELECT name, setting FROM pg_settings;
 
 #### Note about overriding the postgres image
 
-We recommend you use the default image sclorg image. If you are coming from a deployment using the old postgres image from dockerhub (postgres:13), upgrading from awx-operator version 2.12.2 and below to 2.15.0+ will handle migrating your data to the new postgresql image (postgresql-15-c9s).
+We recommend you use the default sclorg image. The operator automatically migrates a managed database that is still running an older major version (the dockerhub `postgres:13` image, `postgresql-13-c9s` or `postgresql-15-c9s`) to `postgresql-18-c9s` the next time it reconciles the deployment. See [PostgreSQL Upgrade Considerations](../upgrade/upgrading.md#postgresql-upgrade-considerations) for what happens during that migration.
 
-You can no longer configure a custom `postgres_data_path` because it is hardcoded in the quay.io/sclorg/postgresql-15-c9s image.
+You can no longer configure a custom `postgres_data_path` because it is hardcoded in the quay.io/sclorg/postgresql-18-c9s image.
 
-If you override the postgres image to use a custom postgres image like postgres:15 for example, the default data directory path may be different. These images cannot be used interchangeably.
+The CentOS Stream 10 based `quay.io/sclorg/postgresql-18-c10s` image is built from the same container scripts and uses the same data directory and environment variables, so it can be selected with `postgres_image` if you prefer it.
+
+If you override the postgres image to use a custom postgres image like postgres:18 for example, the default data directory path may be different. These images cannot be used interchangeably.
 
 #### Initialize Postgres data volume
 
